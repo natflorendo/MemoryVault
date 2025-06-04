@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app, notes }from '../server';
+import app from '../server';
 
 describe('GET /notes', () => {
     it('should return 200 OK', async () => {
