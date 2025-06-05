@@ -13,3 +13,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+<<<<<<< Updated upstream
+=======
+
+model Note {
+  id            String   @id @default(uuid())
+  body          Json
+  timestamp     DateTime @default(now())
+  lastUpdatedAt DateTime @updatedAt
+}
+>>>>>>> Stashed changes
