@@ -14,8 +14,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model note {
-  id        String   @id @default(uuid())
-  body      String
-  timestamp DateTime @default(now())
+<<<<<<< Updated upstream
+=======
+
+model Note {
+  id            String   @id @default(uuid())
+  body          Json
+  timestamp     DateTime @default(now())
+  lastUpdatedAt DateTime @updatedAt
 }
+
+>>>>>>> Stashed changes
