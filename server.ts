@@ -1,10 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import { PrismaClient } from './generated/prisma';
 
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -40,6 +42,12 @@ app.put('/notes/:id', async (req: Request, res: Response, next: NextFunction) =>
         }
     });
     res.json(note);
+});
+
+//test route to clear db
+app.delete('/notes/all', async (req: Request, res: Response, next: NextFunction) => {
+    await prisma.note.deleteMany();
+    res.status(204).send();
 });
 
 app.delete('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
