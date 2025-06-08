@@ -11,11 +11,11 @@ const NoteList = ({state, deleteNote}: NoteListProp) => {
     return (
         state.map((noteItem: Note) => {
             return(
-            <NoteItem
-                key={noteItem.id}
-                note={noteItem}
-                deleteNote={deleteNote}
-            />
+                <NoteItem
+                    key={noteItem.id}
+                    note={noteItem}
+                    deleteNote={deleteNote}
+                />
             )
         })
     )
