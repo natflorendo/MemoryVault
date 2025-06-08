@@ -27,43 +27,53 @@ app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
         });
         res.status(201).json(notes);
     } catch(err: any) {
-        err.status = err.status || 500;
         next(err);
     }
 });
 
 app.put('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const { body } = req.body;
-    const note = await prisma.note.update({
-        where: { id },
-        data: {
-            body
-        }
-    });
-    res.json(note);
+    try {
+        const { id } = req.params;
+        const { body } = req.body;
+        const note = await prisma.note.update({
+            where: { id },
+            data: {
+                body
+            }
+        });
+        res.json(note);
+    } catch(err: any) {
+        next(err);
+    }
 });
 
 //test route to clear db
 app.delete('/notes/all', async (req: Request, res: Response, next: NextFunction) => {
-    await prisma.note.deleteMany();
-    res.status(204).send();
+    try {
+        await prisma.note.deleteMany();
+        res.status(204).send();
+    } catch(err: any) {
+        next(err);
+    }
 });
 
 app.delete('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
-    // await prisma.note.deleteMany();
-    const { id } = req.params;
-    await prisma.note.delete({
-        where: {
-            id
-        }
-    });
-    res.status(204).send();
+    try {
+        const { id } = req.params;
+        await prisma.note.delete({
+            where: {
+                id
+            }
+        });
+        res.status(204).send();
+    } catch(err: any) {
+        next(err);
+    }
 });
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
-    res.status(status).json({error: err.message })
+    res.status(status).json({error: err.message, statusCode: status })
 }
 app.use(errorHandler);
 
