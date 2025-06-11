@@ -1,6 +1,7 @@
 .note-item {
-    /* width: 10px; */
-    /* height: 10px; */
+    display: block;
     background-color: #f0f0f0;
-    /* border-color: ; */
+    text-align: center;
+    padding: 1.5rem;
+    height: 150px;
 }

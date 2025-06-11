@@ -18,11 +18,18 @@ interface NoteItemProp {
     deleteNote: (id: string) => void;
 }
 
+const extractText = (note: any): string => {
+    if (note.type === 'text') return note.text ?? '';
+    if (!note.content) return '';
+    return note.content.map(extractText).join('');
+};
+
+
 const NoteItem = ({note, deleteNote}: NoteItemProp) => {
     return(
         <div className="note-item">
           <h3>{formatDate(note.timestamp)}</h3>
-          <p>{note.body.content}</p>
+          <p>{extractText(note.body)}</p>
           <button onClick={() => deleteNote(note.id)}> DELETE</button>
         </div>
     )

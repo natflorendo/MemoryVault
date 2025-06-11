@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
-import type { FormEvent } from 'react';
 import type { Note } from './types';
 import axios from 'axios'
 import './App.css'
 import NoteList from './NoteList';
-import Editor from './Editor';
+import Tiptap from './TipTap';
 
 function App() {
   const HOST = import.meta.env.VITE_API_URL;
   const [state, setState] = useState<Note[]>([]);
-  const [input, setInput] = useState<string>("");
 
   useEffect(() => {
     fetchNotes();
@@ -23,11 +21,10 @@ function App() {
     //   return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(); 
     // });
     setState(notes);
-    setInput("");
   }
 
-  const addNote = async () => {
-    await axios.post(`${HOST}/notes`, { body: { content: input } })
+  const addNote = async (body: Record<string, any>) => {
+    await axios.post(`${HOST}/notes`, { body })
     await fetchNotes();
   }
 
@@ -36,23 +33,28 @@ function App() {
     await fetchNotes();
   }
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    await addNote();
+  const onSubmit = async (content: Record<string, any>) => {
+    console.log("here");
+    await addNote(content);
   }
 
   return (
-    <>
-      <Editor
-        input={input}
-        onSubmit={onSubmit}
-        setInput={setInput}
-      />
-      <NoteList
+    <div className="columns">
+      <div className="left-column">
+        <Tiptap
+          onSubmit={onSubmit}
+        />
+      </div>
+
+      <div className="seperator"></div>
+
+      <div className="right-column">
+        <NoteList
           state={state}
           deleteNote={deleteNote}
       />
-    </>
+      </div>
+    </div>
   )
 }
 
