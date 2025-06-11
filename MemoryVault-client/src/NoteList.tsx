@@ -1,5 +1,6 @@
 import NoteItem from './NoteItem';
 import type { Note } from './types';
+import './NoteList.css'
 
 
 interface NoteListProp {
@@ -9,15 +10,17 @@ interface NoteListProp {
 
 const NoteList = ({state, deleteNote}: NoteListProp) => {
     return (
-        state.map((noteItem: Note) => {
-            return(
-                <NoteItem
-                    key={noteItem.id}
-                    note={noteItem}
-                    deleteNote={deleteNote}
-                />
-            )
-        })
+        <div className="note-list">
+            {state.map((noteItem: Note) => {
+                return(
+                    <NoteItem
+                        key={noteItem.id}
+                        note={noteItem}
+                        deleteNote={deleteNote}
+                    />
+                )
+            })}
+        </div>
     )
 }
 
