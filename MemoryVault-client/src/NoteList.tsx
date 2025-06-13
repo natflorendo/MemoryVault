@@ -6,9 +6,10 @@ import './NoteList.css'
 interface NoteListProp {
     state: Note[];
     deleteNote: (id: string) => void;
+    onSelectedNote: (note: Note | null) => void;
 }
 
-const NoteList = ({state, deleteNote}: NoteListProp) => {
+const NoteList = ({state, deleteNote, onSelectedNote}: NoteListProp) => {
     return (
         <div className="note-list">
             {state.map((noteItem: Note) => {
@@ -17,6 +18,7 @@ const NoteList = ({state, deleteNote}: NoteListProp) => {
                         key={noteItem.id}
                         note={noteItem}
                         deleteNote={deleteNote}
+                        onSelectedNote={onSelectedNote}
                     />
                 )
             })}

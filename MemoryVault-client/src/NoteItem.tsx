@@ -16,6 +16,7 @@ const formatDate = (timestamp: string) => {
 interface NoteItemProp {
     note: Note;
     deleteNote: (id: string) => void;
+    onSelectedNote: (note: Note | null) => void;
 }
 
 const extractText = (note: any): string => {
@@ -25,12 +26,16 @@ const extractText = (note: any): string => {
 };
 
 
-const NoteItem = ({note, deleteNote}: NoteItemProp) => {
+const NoteItem = ({note, deleteNote, onSelectedNote}: NoteItemProp) => {
     return(
-        <div className="note-item">
+        <div className="note-item" onClick={() => onSelectedNote(note)}>
           <h3>{formatDate(note.timestamp)}</h3>
+          <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
           <p>{extractText(note.body)}</p>
-          <button onClick={() => deleteNote(note.id)}> DELETE</button>
+          <button onClick={(e) => {
+            e.stopPropagation();
+            deleteNote(note.id);
+          }}> DELETE</button>
         </div>
     )
 }

@@ -1,0 +1,138 @@
+.action-bar {
+    /* glass effect */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(100px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+}
+
+.tiptap-separator {
+    background-color: rgba(130, 130, 130, 0.6);
+}
+
+.save-btn, .close-btn{
+    /* background-color: rgb(184, 133, 184); */
+    /* background-color: #d7debd; */
+    /* background-color: #a9b89e; */
+    /* background-color: #c5b9c2; */
+    /* background-color: #3e3e36; */
+    /* background-color: #5a5a48; */
+    /* background-color: #f4ead5; */
+    /* background-color: #db8a83; */
+    /* background-color: #9bbf9e; */
+    background-color: #ecd0d3;
+    color: #3e3e36;
+    width: 5em;
+    height: 2.5em;
+    transition: transform 0.3s ease;
+}
+
+.delete-btn {
+    transition: transform 0.3s ease;
+}
+
+.save-btn:hover:not(:disabled), .save-btn:focus:not(:disabled),
+.close-btn:hover:not(:disabled), .close-btn:focus:not(:disabled) {
+    /* background-color: #9bbf9e; */
+    background-color: #f2d6d9;
+    transform: scale(1.1);
+    /* background-color: #c5b9c2; */
+    /* background-color: #3e3e36; */
+    /* background-color: #5a5a48; */
+    /* background-color: #f4ead5; */
+    /* background-color: #db8a83; */
+}
+
+.delete-btn:hover {
+    transform: scale(1.2);
+    color: #9c8a8c;
+}
+
+.save-btn:not(:disabled):active,
+.close-btn:not(:disabled):active {
+    transform: scale(0.7);
+}
+
+.delete-btn:active {
+    transform: scale(1);
+}
+
+.save-btn:disabled,
+.close-btn:disabled {
+    background-color:  rgba(220, 194, 197, 0.5);
+    cursor: not-allowed;
+}
+
+.save-btn:focus,
+.close-btn:focus,
+.delete-btn:focus {
+    outline: none;
+}
+
+.save-btn:focus-visible,
+.close-btn:focus-visible,
+.delete-btn:focus-visible {
+    outline: 2px solid #2563eb; /* Customize color */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
+}
+
+.tiptap-button-group {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+/* Task list styles */
+/* Basic editor styles */
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+
+  /* Task list specific styles */
+  ul[data-type="taskList"] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: #ffcab1;
+    }
+
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+
+    li[data-checked="true"] > div {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+  }
+}
