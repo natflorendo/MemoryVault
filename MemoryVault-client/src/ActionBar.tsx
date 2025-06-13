@@ -6,24 +6,29 @@ import { Button } from '@/components/tiptap-ui-primitive/button';
 // --- Tiptap UI ---
 import { UndoRedoButton } from '@/components/tiptap-ui/undo-redo-button'
 import { MarkButton } from '@/components/tiptap-ui/mark-button';
+import { ListDropdownMenu } from '@/components/tiptap-ui/list-dropdown-menu';
 
 import { useCurrentEditor } from '@tiptap/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import './ActionBar.css';
 
 interface ActionBarProp {
-    onSubmit: () => void;
+    handleSubmit?: () => void;
+    handleClose?: () => void;
+    handleDelete?: () => void;
+    mode?: 'primary' | 'secondary';
 }
 
-const presetColors = ['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFA500'];
-
-export default function ActionBar({onSubmit}: ActionBarProp) {
+export default function ActionBar({handleSubmit, handleClose, handleDelete, mode}: ActionBarProp) {
     const { editor } = useCurrentEditor();
 
     if(!editor) return null;
 
     return (
-        <>
+        <div className="action-bar">
             <Toolbar>
-                <Spacer/>
                 <ToolbarGroup>
                     <UndoRedoButton action ="undo"/>
                     <UndoRedoButton action ="redo"/>
@@ -39,28 +44,59 @@ export default function ActionBar({onSubmit}: ActionBarProp) {
                 </ToolbarGroup>
 
                 <ToolbarSeparator/>
-
+                
                 <ToolbarGroup>
-                    <input
-                        type="color"
-                        onInput={event => editor.chain().focus().setColor(event.currentTarget.value).run()}
-                        value={editor.getAttributes('textStyle').color}
-                        data-testid="setColor"
-                    />
+                    <ListDropdownMenu types={["bulletList", "orderedList", "taskList"]}/>
                 </ToolbarGroup>
 
                 <ToolbarSeparator/>
 
                 <ToolbarGroup>
+                    <input
+                        type="color"
+                        onChange={event => editor.chain().focus().setColor(event.currentTarget.value).run()}
+                        value={editor.getAttributes('textStyle').color}
+                        data-testid="setColor"
+                    />
+                </ToolbarGroup>
+
+                <Spacer/>
+                <Spacer/>
+
+                <ToolbarGroup>
+                {mode == 'primary' && (
                     <Button 
+                        className="save-btn"
                         data-style="primary" 
-                        onClick={onSubmit}
+                        onClick={handleSubmit}
                         disabled={editor.isEmpty}
                     >
-                        Save
+                        <strong>Save</strong>
                     </Button>
+                )}
+                {mode == 'secondary' && (
+                    <Button 
+                        className="close-btn"
+                        data-style="secondary" 
+                        onClick={handleClose}
+                        disabled={editor.isEmpty}
+                    >
+                        <strong>Close</strong>
+                    </Button>
+                )}
                 </ToolbarGroup>
+
+                <Spacer/>
+
+                {mode == 'secondary' && (
+                    <Button 
+                        className="delete-btn"
+                        onClick={handleDelete}
+                    >
+                        <strong><FontAwesomeIcon icon={faTrash} /></strong>
+                    </Button>
+                )}
             </Toolbar>
-        </>
+        </div>
     )
 }
