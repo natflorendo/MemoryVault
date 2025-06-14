@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import type { Note } from './types';
+import type { Note } from './components/types';
 import axios from 'axios'
 import './App.css'
-import NoteList from './NoteList';
-import Tiptap from './TipTap';
+import NoteList from './components/NoteList/NoteList';
+import Tiptap from './components/TipTap/TipTap';
 
 function App() {
   const HOST = import.meta.env.VITE_API_URL;

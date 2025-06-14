@@ -8,8 +8,8 @@ import { Color } from '@tiptap/extension-color';
 import Placeholder from '@tiptap/extension-placeholder';
 import './TipTap.css';
 
-import ActionBar from './ActionBar';
-import type { Note } from './types';
+import ActionBar from '../ActionBar/ActionBar';
+import type { Note } from '../types';
 import { useEffect } from 'react';
 import isEqual from 'lodash.isequal'; 
 

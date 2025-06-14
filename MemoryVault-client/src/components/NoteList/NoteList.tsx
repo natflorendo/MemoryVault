@@ -1,5 +1,5 @@
-import NoteItem from './NoteItem';
-import type { Note } from './types';
+import NoteItem from '../NoteItem/NoteItem';
+import type { Note } from '../types';
 import './NoteList.css'
 
 
