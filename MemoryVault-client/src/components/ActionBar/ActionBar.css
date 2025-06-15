@@ -11,16 +11,7 @@
 }
 
 .save-btn, .close-btn{
-    /* background-color: rgb(184, 133, 184); */
-    /* background-color: #d7debd; */
-    /* background-color: #a9b89e; */
-    /* background-color: #c5b9c2; */
-    /* background-color: #3e3e36; */
-    /* background-color: #5a5a48; */
-    /* background-color: #f4ead5; */
-    /* background-color: #db8a83; */
-    /* background-color: #9bbf9e; */
-    background-color: #ecd0d3;
+    background-color: var(--button-color);
     color: #3e3e36;
     width: 5em;
     height: 2.5em;

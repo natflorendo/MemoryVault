@@ -4,5 +4,7 @@
     row-gap: 2rem;
     max-height: 85vh;
     overflow-y: auto;
-    margin-right: 10rem;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto; 
 }

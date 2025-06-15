@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import type { Note } from './components/types';
-import axios from 'axios'
-import './App.css'
-import NoteList from './components/NoteList/NoteList';
+import axios from 'axios';
+import './App.css';
+import './styles/theme.css';
 import Tiptap from './components/TipTap/TipTap';
+import Tabs from './components/Tabs/Tabs';
 
 function App() {
   const HOST = import.meta.env.VITE_API_URL;
@@ -81,11 +82,11 @@ function App() {
       <div className="separator"></div>
 
       <div className="right-column">
-        <NoteList
+        <Tabs
           state={state}
           deleteNote={deleteNote}
           onSelectedNote={onSelectedNote}
-      />
+        />
       </div>
     </div>
   )

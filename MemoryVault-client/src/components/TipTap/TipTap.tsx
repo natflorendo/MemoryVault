@@ -27,22 +27,6 @@ const extensions = [
   }),
 ];
 
-// const content = {
-//     "type": "doc",
-//     "content": [
-//         {
-//         "type": "paragraph",
-//         "content": [
-//             {
-//             "type": "text",
-//             "text": "Hello World!"
-//             }
-//         ]
-//         }
-//     ]
-//     }
-// const content = ''
-
 interface TipTapProp {
     onSubmit?: (content: Record<string, any>) => void;
     onClose?: (note: Note | null) => void;
