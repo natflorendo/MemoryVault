@@ -33,3 +33,15 @@
     pointer-events: none;
 }
 
+/* Have to manually set styles for italic and code markbuttons */
+/* because the font I used doesn't manually support it */
+.simple-editor-content em {
+  font-style: italic;
+}
+
+.simple-editor-content code {
+  font-family: 'Source Code Pro', monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
