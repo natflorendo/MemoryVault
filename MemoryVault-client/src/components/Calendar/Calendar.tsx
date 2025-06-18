@@ -1,82 +1,86 @@
+import { useState } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import { Tooltip } from 'react-tooltip';
 import 'react-calendar-heatmap/dist/styles.css';
-import './Calendar.css'
+import './Calendar.css';
+import type { Note } from '../types';
+import { formatDate, generateValues, processNotesToHeatmap, shiftDate} from './calendarUtils'
+import NoteList from '../NoteList/NoteList';
+import Key from './Key';
 
-const dummyData = [
-    { date: '2025-01-01', count: 1 },
-    { date: '2025-01-03', count: 4 },
-    { date: '2025-06-14', count: 2 },
-]
-
-const formatDate = (timestamp: Date) => {
-    const date = new Date (timestamp);
-    return (date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    }));
+interface CalendarProps {
+    notes: Note[];
+    onSelectedNote: (note: Note | null) => void;
 }
 
-const generateValues = (start: Date, end: Date, dummyData: {date: string; count: number}[]) => {
-    const dataMap = new Map(dummyData.map(d => [d.date, d.count]));
-    const values: {date: Date, count: number}[] = []
-
-    const currDate = new Date(start)
-
-    while(currDate <= end) {
-        const day = currDate.toLocaleString('en-CA').slice(0, 10);
-        values.push({
-            // clone currDate (otherwise all the dates will share 
-            // the same reference and show same date)
-            date: new Date(currDate),
-            count: dataMap.get(day) ?? 0,
-        });
-        currDate.setDate(currDate.getDate() + 1);
-    }
-
-    return values;
-}
-
-const shiftDate = (date: Date, numDays: number) => {
-  const newDate = new Date(date);
-
-  newDate.setDate(newDate.getDate() + numDays);
-  return newDate;
-
-}
-
-export default function Calendar() {
+export default function Calendar({ notes, onSelectedNote }: CalendarProps) {
+    const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    
     const endDate = new Date();  //today
     const startDate = shiftDate(endDate, -365);
-    const values = generateValues(startDate, endDate, dummyData);
+
+    const processedData = processNotesToHeatmap(notes);
+
+    const values = generateValues(startDate, endDate, processedData);
+
+    // For classForValue
+    const counts = values.map(v => v.count)
+    const min = Math.min(...counts);
+    const max = Math.max(...counts);
     
     return (
-        <>
-            <CalendarHeatmap
-                startDate={startDate}
-                endDate={endDate}
-                values={values}
-                classForValue={(value) => {
-                    if (!value || value.count === 0) return 'color-empty';
-                    return `color-scale-${value.count}`;
-                }}
-                tooltipDataAttrs={(value): Record<string, string> => {
-                    if (!value) return {};
-                    return {
-                        'data-tooltip-id': 'heatmap-tooltip',
-                        'data-tooltip-content': `${formatDate(value.date)} has count: ${value.count}`,
-                    };
+        <div className="calendar-section">
+            <div className="calendar-wrapper">
+                <CalendarHeatmap
+                    startDate={startDate}
+                    endDate={endDate}
+                    values={values}
+                    classForValue={(value) => {
+                        if (!value || value.count === 0) return 'color-empty';
+                        // avoid divide by 0
+                        const percentage = (value.count - min) / (max - min || 1);
+                        const level = Math.ceil(percentage * 4);
+                        return `color-scale-${level}`;
+                    }}
+                    tooltipDataAttrs={(value): Record<string, string> => {
+                        if (!value) return {};
+                        return {
+                            'data-tooltip-id': 'heatmap-tooltip',
+                            'data-tooltip-content': `${formatDate(value.date)} has count: ${value.count}`,
+                        };
 
-                }}
-                showWeekdayLabels={true}
-                onClick={value => {
-                    if (value) {
-                        alert(`${formatDate(value.date)} clicked with count: ${value.count}`);
-                    }
-                }}
-            />
-            <Tooltip id="heatmap-tooltip"/>
-       </>
+                    }}
+                    showWeekdayLabels={true}
+                    onClick={value => {
+                        if (!value) { return; }
+
+                        const clickedDate = value.date.toLocaleString('en-CA').slice(0, 10);
+
+                        if(clickedDate === selectedDate) {
+                            setFilteredNotes([]);
+                            setSelectedDate(null);
+                            return;
+                        }
+                        
+                        const notesOnDate = notes.filter(note => {
+                            return new Date(note.timestamp).toLocaleString('en-CA').slice(0, 10) === clickedDate
+                        });
+                        setFilteredNotes(notesOnDate);
+                        setSelectedDate(clickedDate);
+                    }}
+                />
+                <Tooltip id="heatmap-tooltip"/>
+            </div>
+            <Key/>
+            {filteredNotes.length > 0 && (
+                <NoteList
+                    className="calendar-note-list"
+                    state={filteredNotes}
+                    deleteNote={() => {}}
+                    onSelectedNote={onSelectedNote}
+                />
+            )}
+       </div>
     )
 }

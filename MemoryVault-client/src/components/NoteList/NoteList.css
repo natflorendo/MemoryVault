@@ -3,8 +3,21 @@
     grid-template-columns: minmax(250px, 1fr);
     row-gap: 2rem;
     max-height: 85vh;
-    overflow-y: auto;
-    width: 100%;
     max-width: 350px;
     margin: 0 auto; 
+    overflow-y: auto;
+}
+
+.calendar-note-list {
+    display: flex;
+    gap: 2rem;
+    height: 11rem;
+    overflow-x: auto;
+    max-width: 100vw;
+    margin-top: 3rem;
+}
+
+.calendar-note-list .note-item{
+    width: 300px;
+    flex-shrink: 0;
 }
