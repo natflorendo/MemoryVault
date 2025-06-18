@@ -1,13 +1,34 @@
+.calendar-wrapper {
+    height: 21rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    direction: rtl;
+}
+
 .react-calendar-heatmap {
-  height: 500px;
+  height: 400px;
   overflow: visible;
-  padding: 3rem;
+  padding: 0 0.2rem 0 3.5rem;
 }
 
 .react-calendar-heatmap-month-labels {
     transform: translate(55px, 0);
 }
 
+.react-calendar-heatmap rect:focus {
+  outline: none; 
+  stroke: rgb(111, 160, 228, 0.8);             
+  stroke-width: 1px; 
+}
+
+.key-wrapper {
+  display: flex;
+  height: 100%;
+  gap: 0.2rem;
+  padding: 0.3rem;
+  justify-self: flex-end;
+}
 
 .react-calendar-heatmap .color-scale-1 { fill: #d6e685; }
 .react-calendar-heatmap .color-scale-2 { fill: #8cc665; }

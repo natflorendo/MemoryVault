@@ -27,9 +27,10 @@ export default function Tabs({state, deleteNote, onSelectedNote}: TabsProp) {
         {
             name: 'Calendar',
             content: (
-                <div className="calendar-wrapper">
-                    <Calendar/>
-                </div>
+                <Calendar 
+                    notes={state}
+                    onSelectedNote={onSelectedNote}
+                />
             ),
         }
     ]
