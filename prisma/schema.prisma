@@ -19,4 +19,11 @@ model Note {
   body          Json
   timestamp     DateTime @default(now())
   lastUpdatedAt DateTime @updatedAt
+  Tags          Tag[]
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  name  String
+  Notes Note[]
 }
