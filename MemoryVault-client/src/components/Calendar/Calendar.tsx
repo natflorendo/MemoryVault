@@ -5,7 +5,7 @@ import 'react-calendar-heatmap/dist/styles.css';
 import './Calendar.css';
 import type { Note } from '../types';
 import { formatDate, generateValues, processNotesToHeatmap, shiftDate} from './calendarUtils'
-import NoteList from '../NoteList/NoteList';
+import NoteList from '../Note/NoteList/NoteList';
 import Key from './Key';
 
 interface CalendarProps {
