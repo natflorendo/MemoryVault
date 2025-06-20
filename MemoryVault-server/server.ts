@@ -72,7 +72,7 @@ app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
 app.put('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const { body, tags } = req.body;
+        const { body } = req.body;
 
         if(!(await validateNoteId(id, res))) { return; }
         if(!validateNoteBody(body, res)) { return; }
