@@ -25,6 +25,7 @@
     "@tiptap/pm": "^2.14.0",
     "@tiptap/react": "^2.14.0",
     "@tiptap/starter-kit": "^2.14.0",
+    "axios": "^1.10.0",
     "cors": "^2.8.5",
     "lodash.isequal": "^4.5.0",
     "prosemirror-state": "^1.4.3",
