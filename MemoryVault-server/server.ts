@@ -8,10 +8,11 @@ const prisma = new PrismaClient();
 app.use(express.json());
 app.use(cors());
 
-function validateNoteBody(body: any, res: Response): boolean {
+function checkNoteBody (req: Request, res: Response, next: NextFunction) {
+    const { body }= req.body;
     if(!body) {
         res.status(400).json({ error: 'Missing "body" in request'});
-        return false;
+        return;
     }
     
     if(
@@ -22,21 +23,23 @@ function validateNoteBody(body: any, res: Response): boolean {
         res.status(400).json({ 
             error: 'Invalid "body" format: must include type "doc" and a valid content array'
         });
-        return false;
+        return;
     }
-    return true;
+    next();
 }
 
-async function validateNoteId (id: any, res: Response): Promise<boolean> {
+async function checkNoteExists (req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
     const existingNote = await prisma.note.findUnique({ where: { id } });
         if (!existingNote) {
             res.status(404).json({ error: `Note with id "${id}" not found.` });
-            return false;
+            return;
         }
     
-    return true;
+    next();
 }
 
+// Get all notes
 app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const notes = await prisma.note.findMany({
@@ -48,25 +51,14 @@ app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
+// Create a new note
+app.post('/notes', checkNoteBody, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { body, tags } = req.body
-
-        if(!validateNoteBody(body, res)) { return; }
-
-        const tagData = 
-            tags?.length ? {
-                connectOrCreate: tags.map((name: string) => ({
-                    where: { name },
-                    create: { name }
-                }))
-            } : undefined
+        const { body } = req.body
 
         const notes = await prisma.note.create({
             data: {
                 body,
-                //only add Tags if a non-empty tags array is given
-                ...(tagData && { Tags: tagData })
             },
             include: { Tags: true}
         });
@@ -76,43 +68,80 @@ app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.put('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
+// Update only note body
+app.put('/notes/:id', checkNoteExists, checkNoteBody, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params;
-        const { body, tags } = req.body;
-
-        if (!(await validateNoteId(id, res))) { return; }
-
-        if(!validateNoteBody(body, res)) { return; }
-
-        const tagData = Array.isArray(tags)
-            ? {
-                set: [],
-                ...(tags.length > 0 && {
-                    connectOrCreate: tags.map((name: string) => ({
-                        where: { name },
-                        create: { name }
-                    }))
-                })
-            } as any
-            : undefined
-
         const note = await prisma.note.update({
-            where: { id },
+            where: { id: req.params.id },
             data: {
-                body,
-                Tags: tagData
-            }
+                body: req.body.body,
+            },
+            include: { Tags: true}
         });
 
-        // Clean up unused tags after updating note
+        res.status(200).json(note);
+    } catch(err: any) {
+        next(err);
+    }
+});
+
+// Add tags to note incrementally
+app.post('/notes/:id/tags', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { tag } = req.body;
+
+        if (typeof tag !== 'string' || tag.trim() === '') {
+            res.status(400).json({ error: 'Provide a valid non-empty tag to add' });
+            return;
+        }
+
+        const note = await prisma.note.update({
+            where: { id: req.params.id },
+            data: {
+                Tags: {
+                    connectOrCreate: {
+                        where: { name: tag },
+                        create: { name: tag }
+                    }
+                }
+            },
+            include: { Tags: true }
+        });
+
+        res.status(200).json(note);
+    } catch (err: any) {
+        next(err);
+    }
+});
+
+// Remove tags from note incrementally
+app.delete('/notes/:id/tags', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { tag } = req.body;
+
+        if (typeof tag !== 'string' || tag.trim() === '') {
+            res.status(400).json({ error: 'Provide a valid non-empty tag to remove' });
+            return;
+        }
+
+        const note = await prisma.note.update({
+            where: { id: req.params.id },
+            data: {
+                Tags: {
+                    disconnect: { name: tag }
+                }
+            },
+            include: { Tags: true }
+        })
+
+        // Clean up unused tags
         await prisma.tag.deleteMany({
             where: {
                 Notes: { none: {} }
             }
         });
 
-        res.json(note);
+        res.status(204).send()
     } catch(err: any) {
         next(err);
     }
@@ -135,15 +164,11 @@ app.delete('/notes/all', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
-app.delete('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
+app.delete('/notes/:id', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params;
-
-        if (!(await validateNoteId(id, res))) { return; }
-
         await prisma.note.delete({
             where: {
-                id
+                id: req.params.id
             }
         });
 
