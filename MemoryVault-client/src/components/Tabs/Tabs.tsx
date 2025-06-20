@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Tabs.css';
-import NoteList from '../NoteList/NoteList';
+import NoteList from '../Note/NoteList/NoteList';
 import Calendar from '../Calendar/Calendar';
 import type { Note } from '../types';
 

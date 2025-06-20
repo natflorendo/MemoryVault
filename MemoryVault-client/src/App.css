@@ -38,7 +38,7 @@
 .left-column {
   display: flex;
   flex-direction: column;
-  row-gap: 6rem;
+  row-gap: 3rem;
   margin-left: 3rem;
   height: 85vh;
   flex: 1;

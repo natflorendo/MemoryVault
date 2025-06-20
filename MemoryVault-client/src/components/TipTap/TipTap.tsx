@@ -9,6 +9,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import './TipTap.css';
 
 import ActionBar from '../ActionBar/ActionBar';
+import TagsBar from '../Tag/TagsBar/TagsBar';
 import type { Note } from '../types';
 import { useEffect } from 'react';
 import isEqual from 'lodash.isequal'; 
@@ -99,6 +100,7 @@ const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
           handleDelete={handleDelete}
         />
         <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
+        <TagsBar/>
       </EditorContext.Provider>
     </div>
   )
