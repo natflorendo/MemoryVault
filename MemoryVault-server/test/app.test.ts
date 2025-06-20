@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../server';
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function createTestNote(id = `Test-ID-${crypto.randomUUID()}`) {
