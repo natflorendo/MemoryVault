@@ -37,6 +37,7 @@ async function validateNoteId (id: any, res: Response): Promise<boolean> {
     return true;
 }
 
+// Get all notes
 app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const notes = await prisma.note.findMany({
@@ -48,25 +49,16 @@ app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+// Create a new note
 app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { body, tags } = req.body
 
         if(!validateNoteBody(body, res)) { return; }
 
-        const tagData = 
-            tags?.length ? {
-                connectOrCreate: tags.map((name: string) => ({
-                    where: { name },
-                    create: { name }
-                }))
-            } : undefined
-
         const notes = await prisma.note.create({
             data: {
                 body,
-                //only add Tags if a non-empty tags array is given
-                ...(tagData && { Tags: tagData })
             },
             include: { Tags: true}
         });
@@ -76,43 +68,92 @@ app.post('/notes', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+// Update only note body
 app.put('/notes/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const { body, tags } = req.body;
 
-        if (!(await validateNoteId(id, res))) { return; }
-
+        if(!(await validateNoteId(id, res))) { return; }
         if(!validateNoteBody(body, res)) { return; }
-
-        const tagData = Array.isArray(tags)
-            ? {
-                set: [],
-                ...(tags.length > 0 && {
-                    connectOrCreate: tags.map((name: string) => ({
-                        where: { name },
-                        create: { name }
-                    }))
-                })
-            } as any
-            : undefined
 
         const note = await prisma.note.update({
             where: { id },
             data: {
                 body,
-                Tags: tagData
-            }
+            },
+            include: { Tags: true}
         });
 
-        // Clean up unused tags after updating note
+        res.status(200).json(note);
+    } catch(err: any) {
+        next(err);
+    }
+});
+
+// Add tags to note incrementally
+app.post('/notes/:id/tags', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const { tag } = req.body;
+
+        if(!(await validateNoteId(id, res))) { return; }
+
+        if (typeof tag !== 'string' || tag.trim() === '') {
+            res.status(400).json({ error: 'Provide a valid non-empty tag to add' });
+            return;
+        }
+
+        const note = await prisma.note.update({
+            where: { id },
+            data: {
+                Tags: {
+                    connectOrCreate: {
+                        where: { name: tag },
+                        create: { name: tag }
+                    }
+                }
+            },
+            include: { Tags: true }
+        });
+
+        res.status(200).json(note);
+    } catch (err: any) {
+        next(err);
+    }
+});
+
+// Remove tags from note incrementally
+app.delete('/notes/:id/tags', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const { tag } = req.body;
+
+        if(!(await validateNoteId(id, res))) { return; }
+
+        if (typeof tag !== 'string' || tag.trim() === '') {
+            res.status(400).json({ error: 'Provide a valid non-empty tag to remove' });
+            return;
+        }
+
+        const note = await prisma.note.update({
+            where: { id },
+            data: {
+                Tags: {
+                    disconnect: { name: tag }
+                }
+            },
+            include: { Tags: true }
+        })
+
+        // Clean up unused tags
         await prisma.tag.deleteMany({
             where: {
                 Notes: { none: {} }
             }
         });
 
-        res.json(note);
+        res.status(204).send()
     } catch(err: any) {
         next(err);
     }
