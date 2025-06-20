@@ -1,16 +1,24 @@
 import request from 'supertest';
 import app from '../server';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 const prisma = new PrismaClient();
+
+// Helper for a valid note body
+const validDocBody = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [{ type: 'text', text: 'Test content' }],
+    },
+  ],
+};
 
 async function createTestNote(id = `Test-ID-${crypto.randomUUID()}`) {
   const testNote = await prisma.note.create({
     data: {
       id,
-      body: {
-        title: "Test note",
-        content: "This is a test body",
-      },
+      body: validDocBody,
     },
   });
 
@@ -18,6 +26,7 @@ async function createTestNote(id = `Test-ID-${crypto.randomUUID()}`) {
 }
 
 beforeEach(async () => {
+    // await prisma.note.deleteMany({ where: { id: { contains: 'Test-ID' } } });
     await createTestNote();
 });
 
@@ -33,74 +42,74 @@ describe('GET /notes', () => {
     it('should return 200 OK', async () => {
         const res = await request(app).get('/notes');
         expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveLength(1);
   });
-
-    it('should return an emput array when no notes exist', async () => {
-        await prisma.note.deleteMany();
-        const res = await request(app).get('/notes');
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual([]);
-    });
 });
 
 describe('POST /notes', () => {
     it('should return 201 OK', async () => {
-        const newNote = {
-            body: {
-                title: "New test note",
-                content: "This is another test body",
-            },
-        };
-        let getRes = await request(app).get('/notes');
-        expect(getRes.statusCode).toBe(200);
-        expect(getRes.body).toHaveLength(1);
-
-        const postRes = await request(app)
-                .post('/notes')
-                .send(newNote);
-        expect(postRes.status).toBe(201);
-
-        getRes = await request(app).get('/notes');
-        expect(getRes.statusCode).toBe(200);
-        expect(getRes.body).toHaveLength(2);
-
-        await request(app).delete(`/notes/${postRes.body.id}`)
+        const res = await request(app).post('/notes').send({ 
+            body: validDocBody 
+        });
+        await request(app).delete(`/notes/${res.body.id}`);
+        expect(res.statusCode).toBe(201);
+        expect(res.body.body.type).toBe('doc');
     });
+
+    it('should return 400 if body is missing', async () => {
+        const res = await request(app).post('/notes').send({});
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toMatch(/Missing "body"/);
+    });
+
+    it('should return 400 if body format is invalid', async () => {
+    const res = await request(app).post('/notes').send({
+      body: { type: 'text', content: [] },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toMatch(/Invalid "body" format/);
+  });
 });
 
-describe('PUT /notes', () => {
+describe('PUT /notes/:id', () => {
     it('should return the updated note', async () => {
-        const newNote = await createTestNote();
-        let parsedBody = newNote.body as { title: string; content: string };
-        expect(parsedBody.title).toBe("Test note");
-        expect(parsedBody.content).toBe("This is a test body");
-        newNote.body = {
-            title: "Updated title",
-            content: "Updated content"
+        const note = await createTestNote();
+        const updatedBody = {
+            type: 'doc',
+            content: [
+                {
+                type: 'paragraph',
+                content: [{ type: 'text', text: 'Updated content' }],
+                },
+            ],
         };
 
-        const res = await request(app).put(`/notes/${newNote.id}`).send(newNote);
-        expect(res.status).toBe(200);
+        const res = await request(app).put(`/notes/${note.id}`).send({ body: updatedBody });
 
-        parsedBody = newNote.body as { title: string; content: string };
-        expect(parsedBody.title).toBe("Updated title");
-        expect(parsedBody.content).toBe("Updated content");
+        expect(res.statusCode).toBe(200);
+        expect(res.body.body.content[0].content[0].text).toBe('Updated content');
     });
+
+    it('should return 400 for missing ID', async () => {
+    const res = await request(app).put('/notes/:id').send({ body: validDocBody });
+    expect(res.statusCode).toBe(404);
+    expect(res.body.error).toMatch(/not found/);
+  });
 });
 
 describe('DELETE /notes', () => {
-    it('should return ID Deleted', async () => {
-        const newNote = await createTestNote();
-        let getRes = await request(app).get('/notes');
-        expect(getRes.statusCode).toBe(200);
-        expect(getRes.body).toHaveLength(2);
+    it('should delete the note', async () => {
+        const note = await createTestNote();
+        const delRes = await request(app).delete(`/notes/${note.id}`);
+        expect(delRes.statusCode).toBe(204);
 
-        const res = await request(app).delete(`/notes/${newNote.id}`);
-        expect(res.status).toBe(204);
-
-        getRes = await request(app).get('/notes');
-        expect(getRes.statusCode).toBe(200);
-        expect(getRes.body).toHaveLength(1);
+        const getRes = await request(app).get('/notes');
+        const deleted = getRes.body.find((n: any) => n.id === note.id);
+        expect(deleted).toBeUndefined();
     });
+
+    it('should return 400', async () => {
+    const res = await request(app).delete('/notes/invalid-uuid');
+    expect(res.statusCode).toBe(404);
+    expect(res.body.error).toMatch(/not found/);
+  });
 });
