@@ -32,6 +32,13 @@ const NoteItem = ({note, deleteNote, onSelectedNote}: NoteItemProp) => {
           <h3>{formatDate(note.timestamp)}</h3>
           <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
           <p>{extractText(note.body)}</p>
+          <p>
+            {note.Tags.map((tag) => (
+                <span key={tag.id} className="note-tag">
+                    {tag.name}
+                </span>
+            ))}
+          </p>
           <button onClick={(e) => {
             e.stopPropagation();
             deleteNote(note.id);

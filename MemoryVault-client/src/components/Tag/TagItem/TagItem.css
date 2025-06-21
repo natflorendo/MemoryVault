@@ -1,0 +1,19 @@
+.tag {
+    padding: 5px;
+    flex-shrink: 0;
+    background-color: #f8e8e8;
+    color: #D50032;
+    border: 1px #b7abab solid;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    border-radius: 10px;
+    font-weight: 500;
+    height: 2.7em;
+}
+
+.tag button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
