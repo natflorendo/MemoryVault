@@ -1,19 +1,18 @@
 import { useEditor, EditorContent, EditorContext } from '@tiptap/react';
-import { EditorState } from 'prosemirror-state';
 import StarterKit from '@tiptap/starter-kit';
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list';
 import TextStyle from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Placeholder from '@tiptap/extension-placeholder';
-import './TipTap.css';
 
 import ActionBar from '../ActionBar/ActionBar';
 import TagsBar from '../Tag/TagsBar/TagsBar';
 import type { Note } from '../types';
 import { useState, useEffect } from 'react';
-import isEqual from 'lodash.isequal'; 
+import './TipTap.css';
 
+import { clearEditorHistory, useTiptapHandlers } from './tiptapUtils';
 
 const extensions = [
   StarterKit,
@@ -43,44 +42,13 @@ const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
   });
   const [tags, setTags] = useState<string[]>([]);
 
-  // Clear undo/redo history
-  const clearEditorHistory = () => {
-    if (!editor) return;
-    const newState = EditorState.create({
-      schema: editor.state.schema,
-      doc: editor.state.doc,
-      plugins: editor.state.plugins,
-    });
-    editor.view.updateState(newState);
-  };
-
-  const handleSubmit = () => {
-    if(!editor) { return; }
-    const content = editor.getJSON();
-    onSubmit?.(content)
-    editor.commands.clearContent();
-
-    clearEditorHistory();
-  };
-
-  const handleClose = () => {
-    if(!editor || !note) { return; }
-    const content = editor.getJSON();
-    
-    if(!isEqual(note.body, content)) {
-      note.body = content
-      onClose?.(note);
-    } else {
-      onClose?.(null);
-    }
-  }
-
-  const handleDelete = () => {
-    if(!(note?.id && deleteNote)) { return; }
-    
-    deleteNote(note.id);
-    handleClose();
-  }
+  const { handleSubmit, handleClose, handleDelete } = useTiptapHandlers({
+    onSubmit,
+    onClose,
+    deleteNote,
+    note: note ?? null,
+    editor
+  });
 
   useEffect(() => {
     if (!editor) return;
@@ -88,7 +56,7 @@ const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
     note?.body ? editor.commands.setContent(note?.body) : editor.commands.clearContent();
 
     // Clear undo/redo history
-    clearEditorHistory();
+    clearEditorHistory(editor);
   }, [editor, note?.body]);
 
   return (
