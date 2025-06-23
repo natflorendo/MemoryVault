@@ -6,22 +6,14 @@ import './TagsBar.css'
 interface TagsBarProps {
     note?: Note | null;
     tags: string[];
+    allTags: string[];
     setTags: React.Dispatch<React.SetStateAction<string[]>>;
     addTag?: (note: Note, tag: string) => void;
     deleteTag?: (note: Note, tag: string) => void;
 }
 
-const allTags = [
-    "test 1",
-    "test 2",
-    "test 3",
-    "test 4",
-    "test 5",
-    "HHHH"
-]
-
 export default function TagsBar({ 
-    note, tags, 
+    note, tags, allTags,
     setTags, addTag, deleteTag
 }: TagsBarProps) {
     const [input, setInput] = useState('');

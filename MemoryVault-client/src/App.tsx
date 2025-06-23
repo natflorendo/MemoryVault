@@ -11,9 +11,11 @@ function App() {
   const [state, setState] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
+  const [allTags, setAllTags] = useState<string[]>([]);
 
   useEffect(() => {
     fetchNotes();
+    fetchTags();
   }, []);
 
   const fetchNotes = async () => {
@@ -24,6 +26,17 @@ function App() {
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); 
     });
     setState(notes);
+    fetchTags();
+  }
+
+  const fetchTags = async () => {
+      const response = await axios.get(`${HOST}/tags`);
+      const tags = response.data;
+      const tagNames = tags
+        .map((tag: { name: string }) => tag.name)
+        .sort((a: string, b: string) => a.localeCompare(b));
+      console.log(tagNames);
+      setAllTags(tagNames);
   }
 
   const addNote = async (body: Record<string, any>, tags: string[]) => {
@@ -85,6 +98,7 @@ function App() {
       <div className="left-column">
         <Tiptap
           onSubmit={onSubmit}
+          allTags={allTags}
           mode='primary'
         />
         {showSecondEditor && (
@@ -94,6 +108,7 @@ function App() {
             addTag={addTag}
             deleteTag={deleteTag}
             note={selectedNote}
+            allTags={allTags}
             mode='secondary'
           />
         )}

@@ -34,6 +34,7 @@ interface TipTapProp {
     addTag?: (note: Note, tag: string) => void;
     deleteTag?: (note: Note, tag: string) => void;
     note?: Note | null;
+    allTags: string[];
     mode?: 'primary' | 'secondary';
 }
 
@@ -43,7 +44,8 @@ const Tiptap = ({
   deleteNote, 
   addTag,
   deleteTag,
-  note, 
+  note,
+  allTags,
   mode 
 }: TipTapProp) => {
   const editor = useEditor({
@@ -84,6 +86,7 @@ const Tiptap = ({
         <TagsBar
           note={note}
           tags={tags}
+          allTags={allTags}
           setTags={setTags}
           addTag={mode === 'secondary' ? addTag : undefined}
           deleteTag={mode === 'secondary' ? deleteTag : undefined}
