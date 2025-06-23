@@ -28,14 +28,24 @@ const extensions = [
 ];
 
 interface TipTapProp {
-    onSubmit?: (content: Record<string, any>) => void;
+    onSubmit?: (content: Record<string, any>, tags: string[]) => void;
     onClose?: (note: Note | null) => void;
     deleteNote?: (id: string) => void;
+    addTag?: (note: Note, tag: string) => void;
+    deleteTag?: (note: Note, tag: string) => void;
     note?: Note | null;
     mode?: 'primary' | 'secondary';
 }
 
-const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
+const Tiptap = ({ 
+  onSubmit, 
+  onClose, 
+  deleteNote, 
+  addTag,
+  deleteTag,
+  note, 
+  mode 
+}: TipTapProp) => {
   const editor = useEditor({
     extensions,
     content: note?.body,
@@ -47,7 +57,9 @@ const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
     onClose,
     deleteNote,
     note: note ?? null,
-    editor
+    editor,
+    tags,
+    setTags
   });
 
   useEffect(() => {
@@ -69,7 +81,13 @@ const Tiptap = ({ onSubmit, onClose, deleteNote, note, mode }: TipTapProp) => {
           handleDelete={handleDelete}
         />
         <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
-        <TagsBar tags={tags} setTags={setTags}/>
+        <TagsBar
+          note={note}
+          tags={tags}
+          setTags={setTags}
+          addTag={mode === 'secondary' ? addTag : undefined}
+          deleteTag={mode === 'secondary' ? deleteTag : undefined}
+        />
       </EditorContext.Provider>
     </div>
   )

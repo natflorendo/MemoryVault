@@ -26,8 +26,19 @@ function App() {
     setState(notes);
   }
 
-  const addNote = async (body: Record<string, any>) => {
-    await axios.post(`${HOST}/notes`, { body })
+  const addNote = async (body: Record<string, any>, tags: string[]) => {
+    const response = await axios.post<Note>(`${HOST}/notes`, { body });
+    const note = response.data;
+
+    for(const tag of tags) {
+      await axios.post(`${HOST}/notes/${note.id}/tags`, { tag });
+    }
+
+    await fetchNotes();
+  }
+
+  const addTag = async (note: Note, tag: string) => {
+    await axios.post<Note>(`${HOST}/notes/${note.id}/tags`, { tag });
     await fetchNotes();
   }
 
@@ -36,13 +47,20 @@ function App() {
     await fetchNotes();
   }
 
+  const deleteTag = async (note: Note, tag: string) => {
+    await axios.delete<Note>(`${HOST}/notes/${note.id}/tags`, { 
+      data: { tag },
+    });
+    await fetchNotes();
+  }
+
   const updateNote = async (note: Note) => {
     await axios.put(`${HOST}/notes/${note.id}`, { body: note.body});
     await fetchNotes();
   }
 
-  const onSubmit = async (content: Record<string, any>) => {
-    await addNote(content);
+  const onSubmit = async (content: Record<string, any>, tags: string[]) => {
+    await addNote(content, tags);
   }
 
   const onSelectedNote = (note: Note | null) => {
@@ -73,6 +91,8 @@ function App() {
           <Tiptap
             onClose={onClose}
             deleteNote={deleteNote}
+            addTag={addTag}
+            deleteTag={deleteTag}
             note={selectedNote}
             mode='secondary'
           />

@@ -15,11 +15,13 @@ export const clearEditorHistory = (editor: Editor | null) => {
   };
 
 interface HandlersProp {
-    onSubmit?: (content: Record<string, any>) => void;
+    onSubmit?: (content: Record<string, any>, tags: string[]) => void;
     onClose?: (note: Note | null) => void;
     deleteNote?: (id: string) => void;
     note: Note | null;
     editor: Editor | null;
+    tags: string[];
+    setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const useTiptapHandlers = ({
@@ -27,14 +29,16 @@ export const useTiptapHandlers = ({
     onClose,
     deleteNote,
     note,
-    editor
-
+    editor,
+    tags,
+    setTags
 }: HandlersProp) => {
     const handleSubmit = () => {
         if(!editor) { return; }
         const content = editor.getJSON();
-        onSubmit?.(content)
+        onSubmit?.(content, tags ?? [])
         editor.commands.clearContent();
+        setTags([]);
     
         clearEditorHistory(editor);
       };
