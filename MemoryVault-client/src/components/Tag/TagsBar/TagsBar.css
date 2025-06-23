@@ -1,3 +1,10 @@
+.tags-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    position: relative;
+}
+
 .tags-bar {
     display: flex;
     overflow-x: auto;
@@ -19,4 +26,32 @@
     border: none;
     text-indent: 0.30em;
     height: 2.5em;
+}
+
+.tag-suggestions {
+  list-style: none;
+  padding: 0;
+  background: white;
+  border: 1px solid #ccc;
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 8px;
+  z-index: 100;
+  max-height: 75px;
+  overflow-y: auto;
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.tag-suggestions li {
+  padding: 2px 20px;
+  cursor: pointer;
+}
+
+.tag-suggestions li:hover {
+  background-color: #eee;
 }
