@@ -64,26 +64,14 @@ export default function ActionBar({handleSubmit, handleClose, handleDelete, mode
                 <Spacer/>
 
                 <ToolbarGroup>
-                {mode == 'primary' && (
-                    <Button 
-                        className="save-btn"
-                        data-style="primary" 
-                        onClick={handleSubmit}
+                    <Button
+                        className={mode === 'primary' ? 'save-btn' : 'close-btn'}
+                        data-style={mode}
+                        onClick={mode === 'primary' ? handleSubmit : handleClose}
                         disabled={editor.isEmpty}
                     >
-                        <strong>Save</strong>
+                        <strong>{mode === 'primary' ? 'Save' : 'Close'}</strong>
                     </Button>
-                )}
-                {mode == 'secondary' && (
-                    <Button 
-                        className="close-btn"
-                        data-style="secondary" 
-                        onClick={handleClose}
-                        disabled={editor.isEmpty}
-                    >
-                        <strong>Close</strong>
-                    </Button>
-                )}
                 </ToolbarGroup>
 
                 <Spacer/>
