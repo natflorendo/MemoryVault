@@ -33,7 +33,7 @@ const NoteItem = ({note, deleteNote, onSelectedNote}: NoteItemProp) => {
           <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
           <p>{extractText(note.body)}</p>
           <p>
-            {note.Tags.map((tag) => (
+            {note.Tags?.map((tag) => (
                 <span key={tag.id} className="note-tag">
                     {tag.name}
                 </span>

@@ -8,7 +8,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 
 import ActionBar from '../ActionBar/ActionBar';
 import TagsBar from '../Tag/TagsBar/TagsBar';
-import type { Note } from '../types';
+import type { Note, Tag } from '../types';
 import { useState, useEffect } from 'react';
 import './TipTap.css';
 
@@ -34,7 +34,7 @@ interface TipTapProp {
     addTag?: (note: Note, tag: string) => void;
     deleteTag?: (note: Note, tag: string) => void;
     note?: Note | null;
-    allTags: string[];
+    allTags: Tag[];
     mode?: 'primary' | 'secondary';
 }
 
