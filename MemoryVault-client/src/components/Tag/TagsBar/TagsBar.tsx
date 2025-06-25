@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import TagList from '../TagList/TagList';
-import type { Note } from '@/components/types';
+import type { Note, Tag } from '@/components/types';
 import './TagsBar.css'
 
 interface TagsBarProps {
     note?: Note | null;
     tags: string[];
-    allTags: string[];
+    allTags: Tag[];
     setTags: React.Dispatch<React.SetStateAction<string[]>>;
     addTag?: (note: Note, tag: string) => void;
     deleteTag?: (note: Note, tag: string) => void;
@@ -69,10 +69,12 @@ export default function TagsBar({
                         const value = e.target.value;
                         setInput(value);
                         setSuggestions(
-                            allTags.filter(tag =>
-                                tag.includes(value) &&
-                                !tags.includes(tag)
+                            allTags
+                            .filter(tag =>
+                                tag.name.includes(value) &&
+                                !tags.includes(tag.name)
                             )
+                            .map(tag => tag.name)
                         );
                     }}
                     onKeyDown={handleKeyDown}

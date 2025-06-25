@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Note } from './components/types';
+import type { Note, Tag } from './components/types';
 import axios from 'axios';
 import './App.css';
 import './styles/theme.css';
@@ -11,7 +11,7 @@ function App() {
   const [state, setState] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
-  const [allTags, setAllTags] = useState<string[]>([]);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     fetchNotes();
@@ -30,11 +30,10 @@ function App() {
   }
 
   const fetchTags = async () => {
-      const response = await axios.get(`${HOST}/tags`);
+      const response = await axios.get<Tag[]>(`${HOST}/tags`);
       const tags = response.data;
       const tagNames = tags
-        .map((tag: { name: string }) => tag.name)
-        .sort((a: string, b: string) => a.localeCompare(b));
+        .sort((a: Tag, b: Tag) => a.name.localeCompare(b.name));
       console.log(tagNames);
       setAllTags(tagNames);
   }
@@ -114,11 +113,12 @@ function App() {
         )}
       </div>
 
-      <div className="separator"></div>
+      <div className="separator"/>
 
       <div className="right-column">
         <Tabs
           state={state}
+          allTags={allTags}
           deleteNote={deleteNote}
           onSelectedNote={onSelectedNote}
         />
