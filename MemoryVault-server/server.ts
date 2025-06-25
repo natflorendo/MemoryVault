@@ -185,12 +185,17 @@ app.delete('/notes/:id', checkNoteExists, async (req: Request, res: Response, ne
     }
 });
 
-// For testing purposes. need to see if tags get added and deleted when appropriate
+// Retrieve all tags
+// Mainly for suggestion auto complete feature
 app.get('/tags', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const tags = await prisma.tag.findMany({
         include: {
-            Notes: true
+            Notes: {
+                include: {
+                    Tags: true
+                }
+            }
         }
         });
 
