@@ -1,0 +1,25 @@
+.tag-folder-wrapper {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.tag-separator {
+    height: 1px;
+    background-color: rgba(130, 130, 130, 0.6);
+}
+
+.tag-folder {
+    margin-bottom: 1rem;
+}
+
+.chevron-icon {
+    margin-right: 0.5rem;
+}
+
+.tag-folder-link {
+    margin: 1rem;
+}
+
+.active-link {
+    font-weight: 600;
+}
