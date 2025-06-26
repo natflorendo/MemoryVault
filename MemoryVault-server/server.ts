@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { PrismaClient } from './generated/prisma';
+import { analyzeEmotion } from './services/huggingface';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -60,7 +61,7 @@ app.post('/notes', checkNoteBody, async (req: Request, res: Response, next: Next
             data: {
                 body,
             },
-            include: { Tags: true}
+            include: { Tags: true }
         });
         res.status(201).json(notes);
     } catch(err: any) {
@@ -193,13 +194,29 @@ app.get('/tags', async (req: Request, res: Response, next: NextFunction) => {
         include: {
             Notes: {
                 include: {
-                    Tags: true
+                    Tags: true,
                 }
             }
         }
         });
 
         res.status(200).json(tags);
+    } catch (err: any) {
+        next(err);
+    }
+});
+
+//test route
+app.post('/analyze', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            res.status(400).json({ error: 'Missing text' });
+            return;
+        }
+
+        const emotions = await analyzeEmotion(text);
+        res.status(200).json({ emotions: emotions });
     } catch (err: any) {
         next(err);
     }
