@@ -1,8 +1,10 @@
 import axios from "axios";
+import { prisma } from '../server';
 
 const MODEL = 'SamLowe/roberta-base-go_emotions';
 
-export async function analyzeEmotion(text: string) {
+// Get text from note and analyze emotion
+async function analyzeEmotion(text: string) {
     try {
         const apiKey = process.env.HF_API_KEY;
         if (!apiKey) { throw new Error('Missing Hugging Face API key'); }
@@ -23,4 +25,32 @@ export async function analyzeEmotion(text: string) {
         // throw new Error('Emotion analysis failed.');
         throw err;
     }
+}
+
+const extractText = (note: any): string => {
+    if (note.type === 'text') return note.text ?? '';
+    if (!note.content) return '';
+    return note.content.map(extractText).join(' ');
+};
+
+// Get the highest scoring emotin and tag it
+export async function tagTopEmotion(noteId: string, body: any) {
+    const text = extractText(body);
+    const emotions = await analyzeEmotion(text);
+    const topEmotion = emotions[0]?.label;
+
+    if (!topEmotion) { return null; }
+
+    return prisma.note.update({
+        where: { id: noteId },
+        data: {
+            Tags: {
+                connectOrCreate: {
+                    where: { name: topEmotion },
+                    create: { name: topEmotion }
+                }
+            }
+        },
+        include: { Tags: true }
+    });
 }
