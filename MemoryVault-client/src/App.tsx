@@ -1,78 +1,66 @@
 import { useEffect, useState } from 'react';
 import type { Note, Tag } from './components/types';
-import axios from 'axios';
 import './App.css';
 import './styles/theme.css';
 import Tiptap from './components/TipTap/TipTap';
 import Tabs from './components/Tabs/Tabs';
+import { 
+  fetchNotes, fetchTags,
+  addNote, addTag,
+  deleteNote, deleteTag,
+  updateNote
+} from './NoteService';
 
 function App() {
-  const HOST = import.meta.env.VITE_API_URL;
   const [state, setState] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    fetchNotes();
-    fetchTags();
+    loadNotesAndTags();
   }, []);
 
-  const fetchNotes = async () => {
-    const response = await axios.get<Note[]>(`${HOST}/notes`);
-    const notes = response.data;
-    console.log(notes);
-    notes.sort((a, b) => {
+  const loadNotesAndTags = async () => {
+    const notes = await fetchNotes();
+     notes.sort((a, b) => {
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); 
     });
+    console.log(notes);
     setState(notes);
-    fetchTags();
+
+    const tags = await fetchTags();
+    console.log(tags);
+    setAllTags(tags);
   }
 
-  const fetchTags = async () => {
-      const response = await axios.get<Tag[]>(`${HOST}/tags`);
-      const tags = response.data;
-      const tagNames = tags
-        .sort((a: Tag, b: Tag) => a.name.localeCompare(b.name));
-      console.log(tagNames);
-      setAllTags(tagNames);
-  }
+  const handleAddNote = async (body: Record<string, any>, tags: string[]) => {
+    await addNote(body, tags);
+    await loadNotesAndTags();
+  };
 
-  const addNote = async (body: Record<string, any>, tags: string[]) => {
-    const response = await axios.post<Note>(`${HOST}/notes`, { body });
-    const note = response.data;
+  const handleUpdateNote = async (note: Note) => {
+    await updateNote(note);
+    await loadNotesAndTags();
+  };
 
-    for(const tag of tags) {
-      await axios.post(`${HOST}/notes/${note.id}/tags`, { tag });
-    }
+  const handleDeleteNote = async (id: string) => {
+    await deleteNote(id);
+    await loadNotesAndTags();
+  };
 
-    await fetchNotes();
-  }
+  const handleAddTag = async (note: Note, tag: string) => {
+    await addTag(note, tag);
+    await loadNotesAndTags();
+  };
 
-  const addTag = async (note: Note, tag: string) => {
-    await axios.post<Note>(`${HOST}/notes/${note.id}/tags`, { tag });
-    await fetchNotes();
-  }
-
-  const deleteNote = async (id: String) => {
-    await axios.delete(`${HOST}/notes/${id}`);
-    await fetchNotes();
-  }
-
-  const deleteTag = async (note: Note, tag: string) => {
-    await axios.delete<Note>(`${HOST}/notes/${note.id}/tags`, { 
-      data: { tag },
-    });
-    await fetchNotes();
-  }
-
-  const updateNote = async (note: Note) => {
-    await axios.put(`${HOST}/notes/${note.id}`, { body: note.body});
-    await fetchNotes();
+  const handleDeleteTag = async (note: Note, tag: string) => {
+    await deleteTag(note, tag);
+    await loadNotesAndTags();
   }
 
   const onSubmit = async (content: Record<string, any>, tags: string[]) => {
-    await addNote(content, tags);
+    await handleAddNote(content, tags);
   }
 
   const onSelectedNote = (note: Note | null) => {
@@ -82,7 +70,7 @@ function App() {
 
   const onClose = async (note: Note | null) => {
     setShowSecondEditor(false);
-    if(note) { updateNote(note); }
+    if(note) { handleUpdateNote(note); }
   }
 
   //test if note was selected
@@ -103,9 +91,9 @@ function App() {
         {showSecondEditor && (
           <Tiptap
             onClose={onClose}
-            deleteNote={deleteNote}
-            addTag={addTag}
-            deleteTag={deleteTag}
+            deleteNote={handleDeleteNote}
+            addTag={handleAddTag}
+            deleteTag={handleDeleteTag}
             note={selectedNote}
             allTags={allTags}
             mode='secondary'
@@ -119,7 +107,7 @@ function App() {
         <Tabs
           state={state}
           allTags={allTags}
-          deleteNote={deleteNote}
+          deleteNote={handleDeleteNote}
           onSelectedNote={onSelectedNote}
         />
       </div>
