@@ -5,6 +5,8 @@ import TaskList from '@tiptap/extension-task-list';
 import TextStyle from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Placeholder from '@tiptap/extension-placeholder';
+import Link from '@tiptap/extension-link';
+import { EditorView } from '@tiptap/pm/view';
 
 import ActionBar from '../ActionBar/ActionBar';
 import TagsBar from '../Tag/TagsBar/TagsBar';
@@ -12,7 +14,10 @@ import type { Note, Tag } from '../types';
 import { useState, useEffect } from 'react';
 import './TipTap.css';
 
-import { clearEditorHistory, useTiptapHandlers } from './tiptapUtils';
+import { 
+  clearEditorHistory, useTiptapHandlers,
+  insertIndent, removeIndent
+} from './tiptapUtils';
 
 const extensions = [
   StarterKit,
@@ -24,6 +29,15 @@ const extensions = [
   TaskList,
   TaskItem.configure({
     nested: true,
+  }),
+  Link.extend({inclusive: false,}).configure({
+    autolink: true,
+    linkOnPaste: true,
+    openOnClick: true,
+    HTMLAttributes: {
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    },
   }),
 ];
 
@@ -51,6 +65,31 @@ const Tiptap = ({
   const editor = useEditor({
     extensions,
     content: note?.body,
+    editorProps: {
+      attributes: {
+        class:"simple-editor-content",
+        spellcheck: 'true',
+        autocorrect: 'on',
+        autocomplete: 'on',
+      },
+      //Indent/Outdent
+      handleKeyDown(view: EditorView, event: KeyboardEvent): boolean {
+        if (event.key !== 'Tab') { return false; }
+
+        event.preventDefault();
+        const isList = editor?.isActive('listItem') || editor?.isActive('taskItem');
+
+        if (event.shiftKey) {
+          return isList
+            ? editor?.commands.liftListItem('listItem') ?? false
+            : removeIndent(view);
+        } else {
+          return isList
+            ? editor?.commands.sinkListItem('listItem') ?? false
+            : insertIndent(view);
+        }
+      },
+    }
   });
   const [tags, setTags] = useState<string[]>([]);
 
@@ -82,7 +121,7 @@ const Tiptap = ({
           handleClose={handleClose}
           handleDelete={handleDelete}
         />
-        <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
+        <EditorContent editor={editor} role="presentation"/>
         <TagsBar
           note={note}
           tags={tags}
