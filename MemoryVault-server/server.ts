@@ -1,44 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { PrismaClient } from './generated/prisma';
-import { analyzeEmotion } from './services/huggingface';
+import { checkNoteBody } from './helpers/checkNoteBody';
+import { checkNoteExists } from './helpers/checkNoteExists';
+import { tagTopEmotion } from './services/huggingface';
 
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cors());
-
-function checkNoteBody (req: Request, res: Response, next: NextFunction) {
-    const { body }= req.body;
-    if(!body) {
-        res.status(400).json({ error: 'Missing "body" in request'});
-        return;
-    }
-    
-    if(
-        body.type !== 'doc' || 
-        !Array.isArray(body.content) || 
-        body.content.length === 0
-    ) {
-        res.status(400).json({ 
-            error: 'Invalid "body" format: must include type "doc" and a valid content array'
-        });
-        return;
-    }
-    next();
-}
-
-async function checkNoteExists (req: Request, res: Response, next: NextFunction) {
-    const { id } = req.params;
-    const existingNote = await prisma.note.findUnique({ where: { id } });
-        if (!existingNote) {
-            res.status(404).json({ error: `Note with id "${id}" not found.` });
-            return;
-        }
-    
-    next();
-}
 
 // Get all notes
 app.get('/notes', async (req: Request, res: Response, next: NextFunction) => {
@@ -63,7 +34,9 @@ app.post('/notes', checkNoteBody, async (req: Request, res: Response, next: Next
             },
             include: { Tags: true }
         });
-        res.status(201).json(notes);
+
+        const updatedNote = await tagTopEmotion(notes.id, body)
+        res.status(201).json(updatedNote);
     } catch(err: any) {
         next(err);
     }
@@ -206,22 +179,6 @@ app.get('/tags', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-//test route
-app.post('/analyze', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { text } = req.body;
-        if (!text) {
-            res.status(400).json({ error: 'Missing text' });
-            return;
-        }
-
-        const emotions = await analyzeEmotion(text);
-        res.status(200).json({ emotions: emotions });
-    } catch (err: any) {
-        next(err);
-    }
-});
-
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
     res.status(status).json({error: err.message, statusCode: status })
@@ -238,4 +195,4 @@ if(require.main === module) {
 }
 
 //Export app for testing access
-export default app;
+export {app, prisma};
