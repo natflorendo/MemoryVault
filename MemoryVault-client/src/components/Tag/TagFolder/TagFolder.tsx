@@ -40,7 +40,7 @@ const TagFolder = ({ allTags, deleteNote, onSelectedNote }: TagFolderProp) => {
 
                     {activeTabs.includes(tag.name) && tag.Notes.length > 0 && (
                         <NoteList
-                            state={tag.Notes}
+                            allNotes={tag.Notes}
                             deleteNote={deleteNote}
                             onSelectedNote={onSelectedNote}
                         />

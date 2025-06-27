@@ -2,7 +2,6 @@
     display: grid;
     grid-template-columns: minmax(250px, 1fr);
     row-gap: 2rem;
-    max-height: 85vh;
     max-width: 350px;
     margin: 0 auto; 
     overflow-y: auto;

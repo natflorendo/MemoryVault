@@ -12,7 +12,7 @@ import {
 } from './NoteService';
 
 function App() {
-  const [state, setState] = useState<Note[]>([]);
+  const [allNotes, setAllNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
@@ -27,7 +27,7 @@ function App() {
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); 
     });
     console.log(notes);
-    setState(notes);
+    setAllNotes(notes);
 
     const tags = await fetchTags();
     console.log(tags);
@@ -105,7 +105,7 @@ function App() {
 
       <div className="right-column">
         <Tabs
-          state={state}
+          allNotes={allNotes}
           allTags={allTags}
           deleteNote={handleDeleteNote}
           onSelectedNote={onSelectedNote}
