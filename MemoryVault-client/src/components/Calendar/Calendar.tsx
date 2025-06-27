@@ -76,7 +76,7 @@ export default function Calendar({ notes, onSelectedNote }: CalendarProps) {
             {filteredNotes.length > 0 && (
                 <NoteList
                     className="calendar-note-list"
-                    allNotes={filteredNotes}
+                    state={filteredNotes}
                     deleteNote={() => {}}
                     onSelectedNote={onSelectedNote}
                 />

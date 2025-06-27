@@ -4,17 +4,17 @@ import './NoteList.css'
 
 
 interface NoteListProp {
-    allNotes: Note[];
+    state: Note[];
     searchTerm?: string;
     className?: string; 
     deleteNote: (id: string) => void;
     onSelectedNote: (note: Note | null) => void;
 }
 
-const NoteList = ({ allNotes, searchTerm, deleteNote, onSelectedNote, className }: NoteListProp) => {
+const NoteList = ({ state, searchTerm, deleteNote, onSelectedNote, className }: NoteListProp) => {
     return (
         <div className={`note-list ${className}`}>
-            {allNotes.map((noteItem: Note) => {
+            {state.map((noteItem: Note) => {
                 return(
                     <NoteItem
                         key={noteItem.id}

@@ -35,7 +35,7 @@ export default function NotesView({
         <div className="notes-view">
             <SearchBar value={searchTerm} className={searchClass} onChange={setSearchTerm}/>
             <NoteList
-                allNotes={filteredNotes}
+                state={filteredNotes}
                 searchTerm={searchTerm}
                 className={noteListClass}
                 deleteNote={deleteNote}
