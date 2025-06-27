@@ -1,4 +1,5 @@
 import type { Note } from '../../types';
+import { getHighlightedSnippet } from './noteItemUtils';
 import './NoteItem.css';
 
 const formatDate = (timestamp: string) => {
@@ -15,23 +16,19 @@ const formatDate = (timestamp: string) => {
 
 interface NoteItemProp {
     note: Note;
+    searchTerm?: string;
     deleteNote: (id: string) => void;
     onSelectedNote: (note: Note | null) => void;
 }
 
-const extractText = (note: any): string => {
-    if (note.type === 'text') return note.text ?? '';
-    if (!note.content) return '';
-    return note.content.map(extractText).join('');
-};
 
-
-const NoteItem = ({note, deleteNote, onSelectedNote}: NoteItemProp) => {
+const NoteItem = ({note, searchTerm, deleteNote, onSelectedNote}: NoteItemProp) => {
     return(
         <div className="note-item" onClick={() => onSelectedNote(note)}>
           <h3>{formatDate(note.timestamp)}</h3>
           <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
-          <p>{extractText(note.body)}</p>
+          {/* <p>{extractText(note.body)}</p> */}
+          <p>{getHighlightedSnippet(note.body, searchTerm || '')}</p>
           <p>
             {note.Tags?.map((tag) => (
                 <span key={tag.id} className="note-tag">

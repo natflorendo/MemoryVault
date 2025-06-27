@@ -1,26 +1,31 @@
 import { useState } from 'react';
 import './Tabs.css';
-import NoteList from '../Note/NoteList/NoteList';
+import NotesView from '../Note/NotesView/NotesView';
 import Calendar from '../Calendar/Calendar';
 import TagFolder from '../Tag/TagFolder/TagFolder';
 import type { Note, Tag } from '../types'; 
 
 interface TabsProp {
-    state: Note[];
+    allNotes: Note[];
     allTags: Tag[];
     deleteNote: (id: string) => void;
     onSelectedNote: (note: Note | null) => void;
 }
 
-export default function Tabs({state, allTags, deleteNote, onSelectedNote}: TabsProp) {
+export default function Tabs({allNotes, allTags, deleteNote, onSelectedNote}: TabsProp) {
     const [activeTab, setActiveTab] = useState("Recent");
 
     const tabs = [
         {
             name: 'Recent',
             content: (
-                <NoteList
-                    state={state}
+                // <NoteList
+                //     allNotes={allNotes}
+                //     deleteNote={deleteNote}
+                //     onSelectedNote={onSelectedNote}
+                // />
+                <NotesView
+                    allNotes={allNotes}
                     deleteNote={deleteNote}
                     onSelectedNote={onSelectedNote}
                 />
@@ -40,7 +45,7 @@ export default function Tabs({state, allTags, deleteNote, onSelectedNote}: TabsP
             name: 'Calendar',
             content: (
                 <Calendar 
-                    notes={state}
+                    notes={allNotes}
                     onSelectedNote={onSelectedNote}
                 />
             ),

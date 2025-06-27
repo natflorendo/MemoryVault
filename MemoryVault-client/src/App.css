@@ -9,6 +9,7 @@
 
 #root {
   height: 100vh;
+  width: 100vw;
   position: fixed;
   background-color: var(--theme-color);
   /* background-color: rgb(184, 133, 184); */
@@ -30,7 +31,7 @@
 
 .columns {
   display: flex;
-  height: 100vw;
+  height: 100vh;
   width: 100vw;
   margin-top: 2rem;
 }
@@ -40,7 +41,7 @@
   flex-direction: column;
   row-gap: 3rem;
   margin-left: 3rem;
-  height: 85vh;
+  height: 100%;
   flex: 1;
 }
 
@@ -48,6 +49,7 @@
   display: flex;
   flex-direction: column;
   max-width: 45vw;
+  height: 100%;
   flex: 1;
   margin: 0 2rem;
 }
