@@ -19,11 +19,6 @@ export default function Tabs({allNotes, allTags, deleteNote, onSelectedNote}: Ta
         {
             name: 'Recent',
             content: (
-                // <NoteList
-                //     allNotes={allNotes}
-                //     deleteNote={deleteNote}
-                //     onSelectedNote={onSelectedNote}
-                // />
                 <NotesView
                     allNotes={allNotes}
                     deleteNote={deleteNote}
