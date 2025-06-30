@@ -10,6 +10,8 @@
 
 .tag-folder {
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .chevron-icon {
@@ -20,6 +22,7 @@
     margin: 1rem;
 }
 
+/* Also in Tabs.css */
 .active-link {
     font-weight: 600;
 }
