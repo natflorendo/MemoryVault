@@ -23,6 +23,7 @@
     transition: 0.5s;
 }
 
+/* Also in TagFolder.css */
 .active-link {
     font-weight: 600;
 }
