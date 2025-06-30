@@ -9,6 +9,7 @@ export async function checkNoteOwnership (req: Request, res: Response, next: Nex
             res.status(400).json({ error: "Not authorized to access this note" });
             return;
         }
+        next();
     } catch (err: any) {
         next(err);
     }

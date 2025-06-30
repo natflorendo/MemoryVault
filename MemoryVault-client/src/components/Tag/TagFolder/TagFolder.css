@@ -1,5 +1,5 @@
 .tag-folder-wrapper {
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 125px);
     overflow-y: auto;
 }
 

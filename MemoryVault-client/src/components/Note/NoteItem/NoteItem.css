@@ -1,10 +1,44 @@
 .note-item {
     display: block;
+    position: relative;
     background-color: #f0f0f0;
     text-align: center;
     padding: 1.5rem;
-    height: 150px;
+    height: fit-content;
     width: 100%;
+    border-radius: 6px;
+}
+
+.note-item button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.note-item button:hover {
+    transform: scale(1.2);
+    color: #9c8a8c;
+}
+
+.note-tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+}
+
+.note-tag {
+  padding: 5px;
+  flex-shrink: 0;
+  background-color: #f8e8e8;
+  color: #D50032;
+  border: 1px #b7abab solid;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  border-radius: 10px;
+  font-weight: 500;
 }
 
 mark {

@@ -21,8 +21,10 @@ export default function TagsBar({
 
     useEffect(() => {
         if(note?.Tags && note.Tags.length > 0) {
-            const noteTags = note.Tags.map(tag => tag.name).reverse();
+            const noteTags = [...note.Tags].reverse().map(tag => tag.name);
             setTags(noteTags);
+        } else {
+            setTags([]);
         }
     }, [note, setTags]);
     

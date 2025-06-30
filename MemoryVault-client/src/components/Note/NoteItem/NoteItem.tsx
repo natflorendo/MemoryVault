@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import type { Note } from '../../types';
 import { getHighlightedSnippet } from './noteItemUtils';
 import './NoteItem.css';
@@ -25,21 +27,23 @@ interface NoteItemProp {
 const NoteItem = ({note, searchTerm, deleteNote, onSelectedNote}: NoteItemProp) => {
     return(
         <div className="note-item" onClick={() => onSelectedNote(note)}>
-          <h3>{formatDate(note.timestamp)}</h3>
-          <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
-          {/* <p>{extractText(note.body)}</p> */}
-          <p>{getHighlightedSnippet(note.body, searchTerm || '')}</p>
-          <p>
-            {note.Tags?.map((tag) => (
-                <span key={tag.id} className="note-tag">
-                    {tag.name}
-                </span>
-            ))}
-          </p>
-          <button onClick={(e) => {
-            e.stopPropagation();
-            deleteNote(note.id);
-          }}> DELETE</button>
+            <h3>{formatDate(note.timestamp)}</h3>
+            <h6>Last Updated: {formatDate(note.lastUpdatedAt)}</h6>
+            {/* <p>{extractText(note.body)}</p> */}
+            <p>{getHighlightedSnippet(note.body, searchTerm || '')}</p>
+            <p className="note-tag-container">
+                {note.Tags?.reverse().map((tag) => (
+                    <span key={tag.id} className="note-tag">
+                        {tag.name}
+                    </span>
+                ))}
+            </p>
+            <button onClick={(e) => {
+                e.stopPropagation();
+                deleteNote(note.id);
+            }}> 
+                <FontAwesomeIcon icon={faTrash} />
+            </button>
         </div>
     )
 }
