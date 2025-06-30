@@ -3,6 +3,7 @@ import cors from 'cors';
 import { PrismaClient } from './generated/prisma';
 import noteRoutes from './routes/noteRoutes';
 import tagRoutes from './routes/tagRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -12,6 +13,7 @@ app.use(cors());
 
 app.use('/notes', noteRoutes);
 app.use('/tags', tagRoutes);
+app.use('/auth', authRoutes);
 
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {

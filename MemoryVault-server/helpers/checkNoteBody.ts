@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 export function checkNoteBody (req: Request, res: Response, next: NextFunction) {
-    const { body }= req.body;
+    const { body } = req.body;
     if(!body) {
         res.status(400).json({ error: 'Missing "body" in request'});
         return;
