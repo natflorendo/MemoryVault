@@ -22,6 +22,7 @@
     margin: 0.5rem 0 1rem 0;
     box-shadow: 0 0.2em 0.8em rgba(0, 0, 0, 0.8);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: var(--input-color);
 }
 
 /* Display a Placeholder only for the first line in an empty editor. */

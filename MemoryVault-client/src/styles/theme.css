@@ -1,8 +1,11 @@
 :root {
   --theme-color: #d7debd;
-  --button-color: #ecd0d3;
   --accent-line-color: #8b5e3c; 
-  /* background-color: rgb(184, 133, 184); */
+  --accent-color: #d6a4a4;
+  --button-color: #ecd0d3;
+  --hover-btn-color: #f2d6d9;
+  --input-color: #000;
+  /* background-color: #b885b8; */
   /* background-color: #a9b89e; */
   /* background-color: #c5b9c2; */
   /* background-color: #3e3e36; */

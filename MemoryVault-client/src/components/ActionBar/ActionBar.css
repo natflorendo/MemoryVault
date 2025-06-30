@@ -4,6 +4,7 @@
     backdrop-filter: blur(100px);
     border: 1px solid rgba(255, 255, 255, 0.75);
     border-radius: 10px;
+    height: 2.9rem;
 }
 
 .tiptap-separator {
@@ -24,14 +25,8 @@
 
 .save-btn:hover:not(:disabled), .save-btn:focus:not(:disabled),
 .close-btn:hover:not(:disabled), .close-btn:focus:not(:disabled) {
-    /* background-color: #9bbf9e; */
-    background-color: #f2d6d9;
+    background-color: var(--hover-btn-color);
     transform: scale(1.1);
-    /* background-color: #c5b9c2; */
-    /* background-color: #3e3e36; */
-    /* background-color: #5a5a48; */
-    /* background-color: #f4ead5; */
-    /* background-color: #db8a83; */
 }
 
 .delete-btn:hover {
