@@ -12,7 +12,7 @@ export const addNote = async (body: Record<string, any>, tags: string[]) => {
     const response = await axios.post<Note>(`${HOST}/notes`, { body });
     const note = response.data;
 
-    for(const tag of tags) {
+    for(const tag of [...tags].reverse()) {
       await axios.post(`${HOST}/notes/${note.id}/tags`, { tag });
     }
 };

@@ -24,6 +24,11 @@ function App() {
   useEffect(() => {
     fetchCurrentUser(setUser, loadNotesAndTags, navigate);
     // loadNotesAndTags();
+    const root = document.getElementById("root");
+    if(root) {
+        root.classList.add("fixed-root"); 
+        root.classList.remove("scrollable-root");
+    }
   }, []);
 
   const loadNotesAndTags = async () => {
@@ -50,6 +55,8 @@ function App() {
   };
 
   const handleDeleteNote = async (id: string) => {
+    setShowSecondEditor(false);
+    setSelectedNote(null);
     await deleteNote(id);
     await loadNotesAndTags();
   };
