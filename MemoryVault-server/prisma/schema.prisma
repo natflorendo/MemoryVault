@@ -14,12 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  notes    Note[]
+}
+
 model Note {
   id            String   @id @default(uuid())
   body          Json
   timestamp     DateTime @default(now())
   lastUpdatedAt DateTime @updatedAt
   Tags          Tag[]
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
 model Tag {

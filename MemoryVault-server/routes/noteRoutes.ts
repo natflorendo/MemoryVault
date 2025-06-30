@@ -2,15 +2,22 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { prisma } from '../server';
 import { checkNoteBody } from '../helpers/checkNoteBody';
 import { checkNoteExists } from '../helpers/checkNoteExists';
+import { checkNoteOwnership } from '../helpers/checkNoteOwnership';
+import { requireAuth } from '../helpers/requireAuth';
 import { tagTopEmotion } from '../services/huggingface';
 
 const router = Router();
+
+router.use(requireAuth);
 
 // Get all notes
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const notes = await prisma.note.findMany({
-            include: { Tags: true }
+            where: { userId: (req as any).userId },
+            include: { 
+                Tags: true, 
+            }
         });
         res.status(200).json(notes);
     } catch(err: any) {
@@ -21,11 +28,12 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 // Create a new note
 router.post('/', checkNoteBody, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { body } = req.body
+        const { body } = req.body;
 
         const notes = await prisma.note.create({
             data: {
-                body,
+                userId: (req as any).userId,
+                body
             },
             include: { Tags: true }
         });
@@ -38,7 +46,8 @@ router.post('/', checkNoteBody, async (req: Request, res: Response, next: NextFu
 });
 
 // Update only note body
-router.put('/:id', checkNoteExists, checkNoteBody, async (req: Request, res: Response, next: NextFunction) => {
+router.put('/:id', checkNoteExists, checkNoteBody, checkNoteOwnership,
+    async (req: Request, res: Response, next: NextFunction) => {
     try {
         const note = await prisma.note.update({
             where: { id: req.params.id },
@@ -55,12 +64,10 @@ router.put('/:id', checkNoteExists, checkNoteBody, async (req: Request, res: Res
 });
 
 // Delete a single note
-router.delete('/:id', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', checkNoteExists, checkNoteOwnership, async (req: Request, res: Response, next: NextFunction) => {
     try {
         await prisma.note.delete({
-            where: {
-                id: req.params.id
-            }
+            where: { id: req.params.id }
         });
 
         // Clean up unused tags after deleting note
@@ -77,7 +84,7 @@ router.delete('/:id', checkNoteExists, async (req: Request, res: Response, next:
 });
 
 // Add tags to note incrementally
-router.post('/:id/tags', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/:id/tags', checkNoteExists, checkNoteOwnership, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { tag } = req.body;
 
@@ -106,7 +113,7 @@ router.post('/:id/tags', checkNoteExists, async (req: Request, res: Response, ne
 });
 
 // Remove tags from note incrementally
-router.delete('/:id/tags', checkNoteExists, async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id/tags', checkNoteExists, checkNoteOwnership, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { tag } = req.body;
 
@@ -132,7 +139,7 @@ router.delete('/:id/tags', checkNoteExists, async (req: Request, res: Response, 
             }
         });
 
-        res.status(204).send()
+        res.status(204).send(note)
     } catch(err: any) {
         next(err);
     }
