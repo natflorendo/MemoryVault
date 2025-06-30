@@ -54,16 +54,7 @@ router.post('/login', checkEmailAndPassword, async (req: Request, res: Response,
 // Get current user
 router.get('/me', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authHeader = req.headers.authorization;
-        const token = authHeader?.split(' ')[1];
-        
-        if(!token) {
-            res.status(401).json({ error: "Token missing" });
-            return;
-        }
-
-        const payload = jwt.verify(token, JWT_SECRET) as { userId: string};
-        const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+        const user = await prisma.user.findUnique({ where: { id: (req as any).userId } });
         
         if(!user) {
             res.status(404).json({ error: "User not found" });
