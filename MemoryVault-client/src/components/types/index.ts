@@ -11,3 +11,8 @@ export interface Tag {
     name: string;
     Notes: Note[];
 }
+
+export interface User {
+    id: string;
+    email: string;
+}

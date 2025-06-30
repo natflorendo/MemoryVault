@@ -7,7 +7,12 @@
   font-style: normal;
 }
 
-#root {
+body {
+  background-color: var(--theme-color);
+}
+
+/* Assigned in Login.tsx */
+.fixed-root {
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -33,14 +38,13 @@
   display: flex;
   height: 100vh;
   width: 100vw;
-  margin-top: 2rem;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
   row-gap: 3rem;
-  margin-left: 3rem;
+  margin: 2rem 0 0 3rem;
   height: 100%;
   flex: 1;
 }
@@ -51,5 +55,33 @@
   max-width: 45vw;
   height: 100%;
   flex: 1;
-  margin: 0 2rem;
+  margin: 3.5rem 2rem 0 2rem;
+}
+
+.header-actions {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0.8rem 1.2rem 0.7rem 2.7rem;
+  /* background-color: var(--accent-color); */
+  top: -5px;
+  right: -5px;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.sign-out-btn {
+  background-color: var(--button-color);
+  border: #b19c9e solid 2px;
+  color: #3e3e36;
+  font-weight: 500;
+  /* border: none; */
+  border-radius: 6px;
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.sign-out-btn:hover {
+  background-color: var(--hover-btn-color);
 }

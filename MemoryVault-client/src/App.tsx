@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { Note, Tag } from './components/types';
-import './App.css';
-import './styles/theme.css';
+import { useNavigate } from 'react-router-dom';
+import type { Note, Tag, User } from './components/types';
 import Tiptap from './components/TipTap/TipTap';
 import Tabs from './components/Tabs/Tabs';
 import { 
@@ -10,15 +9,21 @@ import {
   deleteNote, deleteTag,
   updateNote
 } from './NoteService';
+import { fetchCurrentUser } from './Login/auth';
+import './App.css';
+import './styles/theme.css';
 
 function App() {
+  const [user, setUser] = useState<User | null>(null);
   const [allNotes, setAllNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadNotesAndTags();
+    fetchCurrentUser(setUser, loadNotesAndTags, navigate);
+    // loadNotesAndTags();
   }, []);
 
   const loadNotesAndTags = async () => {
@@ -73,6 +78,12 @@ function App() {
     if(note) { handleUpdateNote(note); }
   }
 
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    navigate("/login");
+  }
+
   //test if note was selected
   useEffect(() => {
     if (selectedNote !== null) {
@@ -103,6 +114,12 @@ function App() {
 
       <div className="separator"/>
 
+      <div className="header-actions">
+        <button onClick={handleSignOut} className="sign-out-btn">
+          Sign Out
+        </button>
+      </div>
+      
       <div className="right-column">
         <Tabs
           allNotes={allNotes}

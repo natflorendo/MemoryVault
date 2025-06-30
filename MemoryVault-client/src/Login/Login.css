@@ -1,0 +1,91 @@
+.scrollable-root {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    background-color: var(--theme-color);
+}
+
+.login-container {
+    width: 23.75em;
+    height: 25.75em;
+    background-color: #fff;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    padding: 0 3.1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0.5em;
+}
+
+.login-container h1 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.login-container input {
+    color: var(--input-color);
+    border: none;
+    border-bottom: 0.12em solid var(--input-color);
+    outline: none;
+    width: 100%;
+}
+
+.login-container input:focus {
+    border-color: var(--accent-line-color);
+}
+
+.toggle-pwd-icon {
+    position: absolute;
+    top: 60%;
+    right: 3rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    border: none;
+    align-items: center;
+    background: transparent;
+}
+
+.login-submit-btn {
+    width: 100%;
+    font-size: 0.95em;
+    padding: 0.8em 0;
+    border-radius: 2em;
+    border: none;
+    background-color: var(--button-color);
+    color: var(--label-color);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    margin-top: 0.8em;
+    margin-bottom: 0.2em;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.login-submit-btn:active {
+    transform: scale(0.95);
+    background-color: #e0c7ca;
+}
+
+.auth-mode {
+    text-align: center;
+    background: none;
+    border: none;
+    color: #0000ff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.auth-mode:active {
+    color: #800080;
+}
