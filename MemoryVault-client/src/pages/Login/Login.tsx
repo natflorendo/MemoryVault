@@ -62,7 +62,7 @@ function Login() {
                     {isRegister ? 'Sign Up' : 'Sign In'}
                 </button>
             </form>
-            <p className="toggle-auth-mode">
+            <span className="toggle-auth-mode">
                 {isRegister ? (
                     <>
                         Already have an account?{' '}
@@ -78,7 +78,10 @@ function Login() {
                         </button>
                     </>
                 )}
-            </p>
+            </span>
+            <button className="forgot-pwd" onClick={() => navigate("/forgot-password")}>
+                Forgot Password?
+                </button>
         </div>
     )
 }

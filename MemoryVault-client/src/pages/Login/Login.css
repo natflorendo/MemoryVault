@@ -45,7 +45,7 @@
 
 .toggle-pwd-icon {
     position: absolute;
-    top: 60%;
+    top: 57%;
     right: 3rem;
     transform: translateY(-50%);
     cursor: pointer;
@@ -77,13 +77,18 @@
     background-color: #e0c7ca;
 }
 
-.auth-mode {
+.auth-mode, .forgot-pwd {
     text-align: center;
     background: none;
     border: none;
     color: #0000ff;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.forgot-pwd {
+    width: fit-content;
+    padding: 0;
 }
 
 .auth-mode:active {
