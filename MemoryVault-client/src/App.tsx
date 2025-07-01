@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Note, Tag, User } from './components/types';
+import type { Note, Tag } from './components/types';
 import Tiptap from './components/TipTap/TipTap';
 import Tabs from './components/Tabs/Tabs';
 import { 
@@ -9,12 +9,11 @@ import {
   deleteNote, deleteTag,
   updateNote
 } from './NoteService';
-import { fetchCurrentUser } from './Login/auth';
+import { fetchCurrentUser } from './pages/Login/auth';
 import './App.css';
 import './styles/theme.css';
 
 function App() {
-  const [user, setUser] = useState<User | null>(null);
   const [allNotes, setAllNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [showSecondEditor, setShowSecondEditor] = useState(false);
@@ -22,7 +21,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCurrentUser(setUser, loadNotesAndTags, navigate);
+    fetchCurrentUser(loadNotesAndTags, navigate);
     // loadNotesAndTags();
     const root = document.getElementById("root");
     if(root) {
@@ -87,7 +86,6 @@ function App() {
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    setUser(null);
     navigate("/login");
   }
 
