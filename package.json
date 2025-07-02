@@ -1,0 +1,10 @@
+{
+  "name": "memoryvault",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run dev --prefix MemoryVault-client\" \"npm run devStart --prefix MemoryVault-server\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
