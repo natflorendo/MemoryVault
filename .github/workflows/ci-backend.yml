@@ -13,15 +13,23 @@ jobs:
           POSTGRES_DB: memoryvault
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pass
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
 
     env:
       DATABASE_URL: postgresql://user:pass@localhost:5432/memoryvault
+      HF_API_KEY: ${{ secrets.HF_API_KEY }}
 
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
 
     - name: Install backend dependencies
       run: npm ci
@@ -29,4 +37,12 @@ jobs:
 
     - name: Generate Prisma Client
       run: npx prisma generate
+      working-directory: ./MemoryVault-server
+
+    - name: Apply Prisma Migrations
+      run: npx prisma migrate deploy
+      working-directory: ./MemoryVault-server
+
+    - name: Run Backend Tests
+      run: npm test
       working-directory: ./MemoryVault-server
