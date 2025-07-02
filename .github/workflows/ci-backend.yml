@@ -1,0 +1,32 @@
+name: Backend CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: memoryvault
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+
+    env:
+      DATABASE_URL: postgresql://user:pass@localhost:5432/memoryvault
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install backend dependencies
+      run: npm ci
+      working-directory: ./MemoryVault-server
+
+    - name: Generate Prisma Client
+      run: npx prisma generate
+      working-directory: ./MemoryVault-server
