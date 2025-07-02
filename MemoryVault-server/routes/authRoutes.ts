@@ -7,7 +7,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) { throw new Error("JWT_SECRET is not defined in environment variables"); }
 
 // Register
 router.post('/register', checkEmailAndPassword, async (req: Request, res: Response, next: NextFunction) => {
