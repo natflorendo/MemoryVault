@@ -5,11 +5,14 @@ import { requireAuth } from '../helpers/requireAuth';
 import { sendResetEmail } from '../helpers/sendResetEmail';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import passport from 'passport';
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) { throw new Error("JWT_SECRET is not defined in environment variables"); }
+
+// Auth Routes
 
 // Register
 router.post('/register', checkEmailAndPassword, async (req: Request, res: Response, next: NextFunction) => {
@@ -100,6 +103,8 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+// Password Reset
+
 // Request reset code
 router.post('/request-reset', checkEmail, async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -157,6 +162,7 @@ router.post('/verify-reset-code', checkEmail, async (req: Request, res: Response
     }
 });
 
+// Set new password
 router.post('/set-new-password', checkEmailAndPassword, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, code } = req.body;
@@ -191,5 +197,27 @@ router.post('/set-new-password', checkEmailAndPassword, async (req: Request, res
         next(err);
     }
 });
+
+// OAuth Routes
+
+// Redirects the user to Google's consent screen to choose an account and grant permissions
+// The 'scope' determines what information the app will access (e.g., profile and email)
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
+
+// If authentication fails, the user is redirected to /login
+// If successful, the user is redirected to the frontend dashboard
+router.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}/login` }),
+(req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = req.user as { id: string, email: string };
+        const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+            
+        res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`);
+    } catch (err: any) {
+        next(err);
+    }
+  }
+);
 
 export default router;

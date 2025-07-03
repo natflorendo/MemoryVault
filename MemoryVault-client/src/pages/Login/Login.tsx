@@ -62,6 +62,15 @@ function Login() {
                     {isRegister ? 'Sign Up' : 'Sign In'}
                 </button>
             </form>
+            <button
+                className="auth-google-btn"
+                onClick={() => { 
+                    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+                }}
+            >
+                <img className="google-logo" src="/src/assets/google-logo.png" alt="Google Logo" />
+                <span>Continue with Google</span>
+            </button>
             <span className="toggle-auth-mode">
                 {isRegister ? (
                     <>

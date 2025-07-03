@@ -18,6 +18,7 @@ model User {
   id              String    @id @default(uuid())
   email           String    @unique
   password        String
+  oauthProvider   String?
   notes           Note[]
   resetCode       String?
   resetCodeExpiry DateTime?
