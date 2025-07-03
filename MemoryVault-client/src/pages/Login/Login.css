@@ -45,7 +45,7 @@
 
 .toggle-pwd-icon {
     position: absolute;
-    top: 57%;
+    top: 50%;
     right: 3rem;
     transform: translateY(-50%);
     cursor: pointer;
@@ -93,4 +93,60 @@
 
 .auth-mode:active {
     color: #800080;
+}
+
+.auth-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    margin: 0.4rem auto;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: f0f0f0;
+    cursor: pointer;
+}
+
+.auth-google-btn:hover {
+    background-color: #fff;
+}
+
+.auth-google-btn span {
+    font-family: Arial, sans-serif;
+}
+
+.auth-google-btn span {
+  transition: transform 0.2s ease;
+}
+
+.auth-google-btn:active span {
+  transform: scale(0.9);
+}
+
+.google-logo {
+    width: 20px;
+    margin-right: 8px;
+}
+
+.oAuth-spinner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.oAuth-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #333;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
