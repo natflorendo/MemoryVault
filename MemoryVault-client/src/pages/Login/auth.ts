@@ -14,12 +14,14 @@ axios.interceptors.request.use((config) => {
 
 // Fetch the current user using the token
 export const fetchCurrentUser = async (
+    setUser: (user: User) => void,
     loadNotesAndTags: () => void,
     navigate: NavigateFunction
 ) => {
     try {
         const response = await axios.get<User>(`${HOST}/auth/me`);
         console.log(response.data)
+        setUser(response.data);
         loadNotesAndTags();
     } catch (err: any) {
         console.error("Invalid or expired token");
