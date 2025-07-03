@@ -2,9 +2,13 @@
   "name": "memoryvault",
   "version": "1.0.0",
   "scripts": {
+    "setup": "npx ts-node setup.ts",
     "start": "concurrently \"npm run dev --prefix MemoryVault-client\" \"npm run devStart --prefix MemoryVault-server\""
   },
   "devDependencies": {
-    "concurrently": "^9.2.0"
+    "@types/node": "^24.0.10",
+    "concurrently": "^9.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
