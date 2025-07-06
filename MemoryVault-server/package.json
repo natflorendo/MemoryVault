@@ -6,7 +6,7 @@
   "scripts": {
     "devStart": "nodemon server.ts",
     "test": "jest --config=test/jest.config.js",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "start": "node dist/server.js"
   },
   "keywords": [],
