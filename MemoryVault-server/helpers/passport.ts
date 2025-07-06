@@ -5,7 +5,7 @@ import { prisma } from '../server';
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: '/auth/google/callback' // Calls once user successfully logs in via Google
+    callbackURL: `${process.env.BACKEND_URL}/auth/google/callback` // Calls once user successfully logs in via Google
 }, async (accessToken, refreshToken, profile, done) => {
     // Grabs the first email from the Google profile.
     const email = profile.emails?.[0].value;

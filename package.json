@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "setup": "npx ts-node setup.ts",
-    "dev": "concurrently \"npm run dev --prefix MemoryVault-client\" \"npm run devStart --prefix MemoryVault-server\"",
-    "start": "npm run start --prefix MemoryVault-server"
+    "dev": "concurrently \"npm run dev --prefix MemoryVault-client\" \"npm run devStart --prefix MemoryVault-server\""
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
