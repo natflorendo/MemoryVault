@@ -68,7 +68,7 @@ function Login() {
                     window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
                 }}
             >
-                <img className="google-logo" src="/src/assets/google-logo.png" alt="Google Logo" />
+                <img className="google-logo" src="/google-logo.png" alt="Google Logo" />
                 <span>Continue with Google</span>
             </button>
             <span className="toggle-auth-mode">
