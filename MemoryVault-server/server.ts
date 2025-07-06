@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import { PrismaClient } from './generated/prisma';
+import { PrismaClient } from '@prisma/client';
 import noteRoutes from './routes/noteRoutes';
 import tagRoutes from './routes/tagRoutes';
 import authRoutes from './routes/authRoutes';
