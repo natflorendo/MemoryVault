@@ -25,7 +25,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: FRONTEND_URL              # used in OAuth redirect
-        value: https://memoryvault.onrender.com
+        value: https://memoryvault-client.onrender.com
       - key: GOOGLE_CLIENT_ID
         sync: false                   # prevents Render from trying to pull value from GitHub
       - key: GOOGLE_CLIENT_SECRET
@@ -38,6 +38,8 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: BACKEND_URL
+        value: https://memoryvault-api.onrender.com
 
   # --- Front-end ---
   - type: web
