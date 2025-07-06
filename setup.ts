@@ -13,6 +13,7 @@ try {
     // Step 1: Backend
     const backendPath = path.join(__dirname, 'MemoryVault-server');
     run('npm install', backendPath);
+    // Re-generate client
     run('npx prisma generate', backendPath);
     run('npx prisma migrate dev --name init', backendPath);
 
