@@ -21,7 +21,7 @@ MemoryVault was created as a lightweight alternative that is perfect for capturi
 ---
 
 ## Live Demo
-https://memoryvault-client.onrender.com
+https://memoryvault-client.onrender.com/login
 
 ---
 
