@@ -23,7 +23,6 @@ function App() {
 
   useEffect(() => {
     fetchCurrentUser(setUser, loadNotesAndTags, navigate);
-    // loadNotesAndTags();
     const root = document.getElementById("root");
     if(root) {
         root.classList.add("fixed-root"); 
@@ -36,11 +35,11 @@ function App() {
      notes.sort((a, b) => {
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); 
     });
-    console.log(notes);
+    if(import.meta.env.DEV) { console.log(notes); }
     setAllNotes(notes);
 
     const tags = await fetchTags();
-    console.log(tags);
+    if(import.meta.env.DEV) { console.log(tags); }
     setAllTags(tags);
   }
 
@@ -92,11 +91,13 @@ function App() {
   }
 
   //test if note was selected
-  useEffect(() => {
-    if (selectedNote !== null) {
-      console.log("Selected note updated:", selectedNote);
-    }
-  }, [selectedNote]);
+  if(import.meta.env.DEV) {
+    useEffect(() => {
+      if (selectedNote !== null) {
+        console.log("Selected note updated:", selectedNote);
+      }
+    }, [selectedNote]);
+  }
 
   return (
     <div className="columns">

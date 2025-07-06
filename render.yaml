@@ -1,0 +1,53 @@
+# render.yaml
+databases:
+  - name: memoryvault-db
+    plan: free
+
+services:
+  # --- Backend ---
+  - type: web
+    name: memoryvault-api
+    env: node
+    rootDir: MemoryVault-server
+    plan: free
+    buildCommand: |
+      npm ci
+      npx prisma generate
+      npx prisma migrate deploy
+      npm run build
+    startCommand: |
+      npm run start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: memoryvault-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL              # used in OAuth redirect
+        value: https://memoryvault.onrender.com
+      - key: GOOGLE_CLIENT_ID
+        sync: false                   # prevents Render from trying to pull value from GitHub
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: HF_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+
+  # --- Front-end ---
+  - type: web
+    name: memoryvault-client
+    env: static
+    rootDir: MemoryVault-client
+    buildCommand: |
+      npm ci
+      npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL              # client hits the backend
+        value: https://memoryvault-api.onrender.com

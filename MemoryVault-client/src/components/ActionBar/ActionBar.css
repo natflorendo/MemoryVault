@@ -7,6 +7,10 @@
     height: 2.9rem;
 }
 
+.tiptap-tooltip {
+  background-color: #f0f0f0;
+}
+
 .tiptap-separator {
     background-color: rgba(130, 130, 130, 0.6);
 }

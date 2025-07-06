@@ -69,7 +69,7 @@ Then, open `.env` and replace the placeholder values with your actual credential
 
 After setting up the `.env` file in `MemoryVault-server`, navigate back to the root folder using `cd ..`.
 
-**\*\*NOTE\*\*: Do not commit your `.env` file. It's excluded via `.gitignore`**.
+**🔴\*\*NOTE\*\*: Do not commit your `.env` file. It's excluded via `.gitignore`**.
 
 
 ### 3. Option A: One-command Setup (Recommended)
@@ -84,9 +84,11 @@ This will:
 
 Once setup is complete, you can run the app concurrently:
 ```bash
-npm run start
+npm run dev
 ```
 
+**⚠️ Avoid using slashes (/) in parent folder names.**
+If you clone or move this project into a folder with a name like `CS 440/442`, your shell will interpret that as a nested folder structure, which can break scripts that rely on npx, ts-node, or prisma.
 
 ### 4. Option B: Run Backend and Frontend Concurrently (Manual Setup - One Terminal)
 ```bash
@@ -103,7 +105,7 @@ npm install
 # Step 3: Install root-level dependencies and run both
 cd ..
 npm install
-npm run start
+npm run dev
 ```
 
 
@@ -147,6 +149,7 @@ Here is a list of some features and enchancements I'd like to expand upon in the
 * **Speech-to-Text Input** - Add a voice input option to allow users to dictate their entries, improving accessibility and convenience.
 * **Toggle for Mood Tagging** - Provide a user setting to turn off automatic sentiment/emotion tagging for those who prefer simpler entries.
 * **Custom Tag Colors** - Allow users to assign specific colors to individual tags for better visual organization.
+* **Advanced Filtering in Recent Tab** – Enhance the "Recent" tab with options to sort notes by ascending/descending date, filter by time range (e.g., today, this week), time of day (e.g., morning, afternoon, evening, late night), and combine filters for more refined browsing.
 * **Advanced Tag Filtering and Search** - Add the ability to sort tags in ascending or descending order, and introduce a search bar for quickly finding specific tags.
 * **Multi-Year Calendar Heatmap Support** - Extend the current 365-day heatmap to support entries older than one year. When a user has journal entries that go beyond the past year, the app will automatically create tabs for each year and update the calendar view to display activity for that full year, starting from January 1st.
 * **Text Styling Options** - Add support for rich formatting like bold, italics, underline, and headers. (This is low priority since the app is primarily meant for quick, lightweight journaling)

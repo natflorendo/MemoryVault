@@ -29,7 +29,10 @@ const TagFolder = ({ allTags, deleteNote, onSelectedNote }: TagFolderProp) => {
                     <div className="tag-separator"/>
                     <div
                         className={`tag-folder-link  ${activeTabs.includes(tag.name) ? 'active-link' : ''}`}
-                        onClick={() => {toggleTab(tag.name); console.log(activeTabs)} }
+                        onClick={() => {
+                            toggleTab(tag.name); 
+                            if(import.meta.env.DEV) { console.log(activeTabs) }
+                        }}
                     >
                         <FontAwesomeIcon 
                             icon={activeTabs.includes(tag.name) ? faChevronDown : faChevronRight} 

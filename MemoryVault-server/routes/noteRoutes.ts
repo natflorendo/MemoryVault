@@ -146,20 +146,22 @@ router.delete('/:id/tags', checkNoteExists, checkNoteOwnership, async (req: Requ
 });
 
 // Dev Only: Clear all Notes and Tags
-router.delete('/all', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        await prisma.note.deleteMany();
+if(process.env.NODE_ENV === 'development') {
+    router.delete('/all', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await prisma.note.deleteMany();
 
-        await prisma.tag.deleteMany({
-            where: {
-                Notes: { none: {} }
-            }
-        });
+            await prisma.tag.deleteMany({
+                where: {
+                    Notes: { none: {} }
+                }
+            });
 
-        res.status(204).send();
-    } catch(err: any) {
-        next(err);
-    }
-});
+            res.status(204).send();
+        } catch(err: any) {
+            next(err);
+        }
+    });
+}
 
 export default router;

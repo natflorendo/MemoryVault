@@ -93,15 +93,18 @@ router.delete('/', checkEmail, async (req: Request, res: Response, next: NextFun
 });
 
 // Dev Only: get all users
-router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const users = await prisma.user.findMany();
+if(process.env.NODE_ENV === 'development') {
+    router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const users = await prisma.user.findMany();
 
-        res.status(200).json(users);
-    } catch (err: any) {
-        next(err);
-    }
-});
+            res.status(200).json(users);
+        } catch (err: any) {
+            next(err);
+        }
+    });
+}
+
 
 // Password Reset
 
