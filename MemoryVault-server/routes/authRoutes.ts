@@ -205,12 +205,12 @@ router.post('/set-new-password', checkEmailAndPassword, async (req: Request, res
 
 // Redirects the user to Google's consent screen to choose an account and grant permissions
 // The 'scope' determines what information the app will access (e.g., profile and email)
-router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email'], session: false }))
 
 // If authentication fails, the user is redirected to /login
 // If successful, the user is redirected to the frontend dashboard
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}/login` }),
+  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}/login`, session: false }),
 (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = req.user as { id: string, email: string };

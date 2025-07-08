@@ -136,12 +136,14 @@ npm run dev
 | Database | PostgreSQL + Prisma ORM                        |
 | Auth	   | JWT + Google OAuth                             |
 | AI       | Hugging Face Inference API                     |
-| DevOps   | GitHub Actions (CI)                            |
+| DevOps   | GitHub Actions (CI)  + Render (CD)             |
 
 ---
 
 ## Desired Future Improvements
 Here is a list of some features and enchancements I'd like to expand upon in the future:
+* **Email Verification via Confirmation Links** – Add email verification by sending confirmation links to users upon sign-up. Before sending the email, validate the address using the Mailgun Validation API to filter out disposable, invalid, or mistyped emails. Users must confirm their email address before gaining full access, enhancing account security and reducing spam.
+* **Email Management and Deletion** – Allow users to view and delete their registered email addresses from account settings.
 * **Improved Auto-Correction** - Enhance the current auto-correction experience, potentially using the LanguageTool API for smarter grammar and spelling suggestions.
 * **Custom List Symbols** - Improve bulleted and numbered lists by allowing different bullet styles or symbols for better visual organization.
 * **Linked Notes (Chaining)** - Enable users to link related notes together for easier navigation and continuity of thought. (similar to how obsidian does it)
@@ -152,8 +154,9 @@ Here is a list of some features and enchancements I'd like to expand upon in the
 * **Advanced Filtering in Recent Tab** – Enhance the "Recent" tab with options to sort notes by ascending/descending date, filter by time range (e.g., today, this week), time of day (e.g., morning, afternoon, evening, late night), and combine filters for more refined browsing.
 * **Advanced Tag Filtering and Search** - Add the ability to sort tags in ascending or descending order, and introduce a search bar for quickly finding specific tags.
 * **Multi-Year Calendar Heatmap Support** - Extend the current 365-day heatmap to support entries older than one year. When a user has journal entries that go beyond the past year, the app will automatically create tabs for each year and update the calendar view to display activity for that full year, starting from January 1st.
-* **Text Styling Options** - Add support for rich formatting like bold, italics, underline, and headers. (This is low priority since the app is primarily meant for quick, lightweight journaling)
+* **Text Styling Enhancements** – Extend formatting capabilities to include headers, font options, and improved text color customization. (This is low priority since the app is primarily meant for quick, lightweight journaling)
 * **Responsive Design** - Improve layout and UI responsiveness to provide a smooth and consistent user experience across all devices and screen sizes (e.g. mobile phones and tablets).
+* **Frontend and Backend Testing Expansion** – Add frontend unit testing using Vitest for core UI components and interactions. Expand backend test coverage to improve reliability and ensure long-term maintainability.
 
 ---
 

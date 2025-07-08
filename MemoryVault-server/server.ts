@@ -4,7 +4,6 @@ import { PrismaClient } from '@prisma/client';
 import noteRoutes from './routes/noteRoutes';
 import tagRoutes from './routes/tagRoutes';
 import authRoutes from './routes/authRoutes';
-import session from 'express-session';
 import passport from 'passport';
 import './helpers/passport'
 
@@ -17,14 +16,7 @@ if (!JWT_SECRET) throw new Error('JWT_SECRET not defined');
 app.use(express.json());
 app.use(cors());
 
-app.use(session({
-  secret: JWT_SECRET,     // Used to sign the session ID cookie.
-  resave: false,          // Don’t save session if nothing changed
-  saveUninitialized: true // Save empty session for unauthenticated users 
-}));
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.use('/notes', noteRoutes);
 app.use('/tags', tagRoutes);
