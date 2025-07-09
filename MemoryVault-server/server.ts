@@ -4,17 +4,42 @@ import { PrismaClient } from '@prisma/client';
 import noteRoutes from './routes/noteRoutes';
 import tagRoutes from './routes/tagRoutes';
 import authRoutes from './routes/authRoutes';
+import rateLimit from 'express-rate-limit';
 import passport from 'passport';
+import helmet from 'helmet';
 import './helpers/passport'
 
 const app = express();
 const prisma = new PrismaClient();
+const allowedOrigins = [process.env.FRONTEND_URL];
+if (!process.env.FRONTEND_URL) { throw new Error('FRONTEND_URL not defined in environment'); }
 
 const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) throw new Error('JWT_SECRET not defined');
+if (!JWT_SECRET) { throw new Error('JWT_SECRET not defined'); }
 
 app.use(express.json());
-app.use(cors());
+app.use(helmet());
+
+app.use(cors({
+    origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+    } else {
+        console.warn(`Blocked by CORS: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
 
 app.use(passport.initialize());
 
