@@ -32,7 +32,7 @@ const NoteItem = ({note, searchTerm, deleteNote, onSelectedNote}: NoteItemProp) 
             {/* <p>{extractText(note.body)}</p> */}
             <p>{getHighlightedSnippet(note.body, searchTerm || '')}</p>
             <p className="note-tag-container">
-                {note.Tags?.reverse().map((tag) => (
+                {note.Tags?.map((tag) => (
                     <span key={tag.id} className="note-tag">
                         {tag.name}
                     </span>

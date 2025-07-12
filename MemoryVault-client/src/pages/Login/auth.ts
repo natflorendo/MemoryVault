@@ -20,7 +20,7 @@ export const fetchCurrentUser = async (
 ) => {
     try {
         const response = await axios.get<User>(`${HOST}/auth/me`);
-        console.log(response.data)
+        if(import.meta.env.DEV) { console.log(response.data) }
         setUser(response.data);
         loadNotesAndTags();
     } catch (err: any) {
