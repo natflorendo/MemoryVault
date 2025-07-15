@@ -4,10 +4,10 @@
 * [Overview](#overview)
 * [Live Demo](#live-demo)
 * [Features](#features)
-* [Visuals](#visuals)
 * [Requirements](#requirements)
 * [How To Run Locally](#how-to-run-locally)
 * [Tech Stack](#tech-stack)
+* [Visuals](#visuals)
 * [Desired Future Improvements](#desired-future-improvements)
 * [Helpful Resources](#helpful-resources)
 
@@ -33,46 +33,6 @@ https://memoryvault-client.onrender.com/login
 * **Calendar Activity Heatmap**: A calendar-style heatmap that displays how many journal entries a user creates each day, with darker colors representing higher activity. This feature currently provides a year-long (365-day) visual overview of journaling habits, helping users track consistency and reflect on periods of high or low activity.
 * **Automated Testing with CI/CD**: The backend includes a GitHub Actions pipeline that automatically runs tests and migrations for every push or pull request, ensuring code stability and quality.
 * **Database Integration**: All user data, including journal entries and tags, is stored in a PostgreSQL database using Prisma for secure, structured, and efficient access.
-
----
-
-## Visuals
-### Sign Up / Sign In Flow
-Create an account or securely log in using email and password, with input validation and error handling.
-#### Sign Up Flow
-![Sign Up](path-to-gif.gif)
-#### Sign In Flow
-![Sign In](path-to-gif.gif)
-
-
-### Google OAuth Login
-Authenticate seamlessly using your Google account via OAuth integration for quick, secure access.
-![Google OAuth](path-to-gif.gif)
-
-
-### Forgot Password Flow
-Easily reset your password with email verification and secure token handling.
-![Forgot Password](path-to-gif.gif)
-
-
-### Full Note Management (Home View)
-Create, edit, search, and delete entries from a clean, intuitive interface.
-#### Create Notes
-![Create](path-to-gif.gif)
-#### Update Notes
-![Update](path-to-gif.gif)
-#### Search & Delete Notes
-![Search & Delete](path-to-gif.gif)
-
-
-### Tag-Based Note Organization
-Organize and access notes by shared tags for better categorization.
-![Tag Folder](path-to-gif.gif)
-
-
-### Calendar-Based Note Navigation
-Click on a date to show or hide all notes created that day.
-![Calendar Folder](path-to--gif.gif)
 
 ---
 
@@ -172,6 +132,65 @@ npm run dev
 | Auth	   | JWT + Google OAuth                             |
 | AI       | Hugging Face Inference API                     |
 | DevOps   | GitHub Actions (CI)  + Render (CD)             |
+
+---
+
+## Visuals
+### Sign Up / Sign In Flow
+Create an account or securely log in using email and password, with input validation and error handling.
+
+#### Sign Up Flow
+
+https://github.com/user-attachments/assets/fe6600e7-bc07-4560-afa7-0bc4b4df8a58
+
+#### Sign In Flow
+
+https://github.com/user-attachments/assets/b195945b-5ee1-4855-9668-7c5ab1b70567
+
+
+
+### Google OAuth Login
+Authenticate seamlessly using your Google account via OAuth integration for quick, secure access.
+
+https://github.com/user-attachments/assets/5170cc2c-833b-4b73-bb9a-1c565f2fb370
+
+
+
+### Forgot Password Flow
+Easily reset your password with email verification and secure token handling.
+
+https://github.com/user-attachments/assets/25deb76b-c90f-4be6-a0dd-161515255398
+
+
+
+### Full Note Management (Home View)
+Create, edit, search, and delete entries from a clean, intuitive interface.
+
+#### Create Notes
+
+https://github.com/user-attachments/assets/f439eea7-f078-4797-b358-82641c30bc4b
+
+#### Update Notes
+
+https://github.com/user-attachments/assets/8bd60ee6-c67e-4c96-9a28-d6f4998ac4b1
+
+#### Search & Delete Notes
+
+https://github.com/user-attachments/assets/658117ba-9253-4ca4-9c2f-0e5920f32280
+
+
+
+### Tag-Based Note Organization
+Organize and access notes by shared tags for better categorization.
+
+https://github.com/user-attachments/assets/d198dd8e-4099-44ca-811b-9aafa10e3a66
+
+
+
+### Calendar-Based Note Navigation
+Click on a date to show or hide all notes created that day.
+
+https://github.com/user-attachments/assets/fa592ed3-c6e5-49bd-833e-fac6f2a7a70a
 
 ---
 
