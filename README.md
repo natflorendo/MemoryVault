@@ -37,7 +37,42 @@ https://memoryvault-client.onrender.com/login
 ---
 
 ## Visuals
-Coming soon...
+### Sign Up / Sign In Flow
+Create an account or securely log in using email and password, with input validation and error handling.
+#### Sign Up Flow
+![Sign Up](path-to-gif.gif)
+#### Sign In Flow
+![Sign In](path-to-gif.gif)
+
+
+### Google OAuth Login
+Authenticate seamlessly using your Google account via OAuth integration for quick, secure access.
+![Google OAuth](path-to-gif.gif)
+
+
+### Forgot Password Flow
+Easily reset your password with email verification and secure token handling.
+![Forgot Password](path-to-gif.gif)
+
+
+### Full Note Management (Home View)
+Create, edit, search, and delete entries from a clean, intuitive interface.
+#### Create Notes
+![Create](path-to-gif.gif)
+#### Update Notes
+![Update](path-to-gif.gif)
+#### Search & Delete Notes
+![Search & Delete](path-to-gif.gif)
+
+
+### Tag-Based Note Organization
+Organize and access notes by shared tags for better categorization.
+![Tag Folder](path-to-gif.gif)
+
+
+### Calendar-Based Note Navigation
+Click on a date to show or hide all notes created that day.
+![Calendar Folder](path-to--gif.gif)
 
 ---
 
@@ -149,6 +184,7 @@ Here is a list of some features and enchancements I'd like to expand upon in the
 * **Linked Notes (Chaining)** - Enable users to link related notes together for easier navigation and continuity of thought. (similar to how obsidian does it)
 * **Folders and Note Organization** - Implement a Folder model (one-to-many relationship) so users can group their notes. This would include the ability to create folders and assign notes to them.
 * **Speech-to-Text Input** - Add a voice input option to allow users to dictate their entries, improving accessibility and convenience.
+* **Manual Note Date Selection** – Let users set or adjust the creation date of a note manually.
 * **Toggle for Mood Tagging** - Provide a user setting to turn off automatic sentiment/emotion tagging for those who prefer simpler entries.
 * **Custom Tag Colors** - Allow users to assign specific colors to individual tags for better visual organization.
 * **Advanced Filtering in Recent Tab** – Enhance the "Recent" tab with options to sort notes by ascending/descending date, filter by time range (e.g., today, this week), time of day (e.g., morning, afternoon, evening, late night), and combine filters for more refined browsing.
