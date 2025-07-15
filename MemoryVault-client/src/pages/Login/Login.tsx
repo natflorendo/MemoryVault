@@ -10,6 +10,7 @@ function Login() {
     const [password, setPassword] = useState(''); 
     const [isRegister, setIsRegister] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,7 +26,7 @@ function Login() {
         <div className="login-container">
             <h1>{isRegister ? "Register" : "Log In"}</h1>
             <form onSubmit={(e) => 
-                handleSubmit(e, email, password, isRegister, navigate)}
+                handleSubmit(e, email, password, isRegister, setLoading, navigate)}
             >
                 <label htmlFor="email">Email:</label>
                 <input 
@@ -58,8 +59,15 @@ function Login() {
                 </div>
 
 
-                <button className="login-submit-btn" type="submit">
-                    {isRegister ? 'Sign Up' : 'Sign In'}
+                <button className="login-submit-btn" type="submit" disabled={loading}>
+                    {loading ? (
+                            <>
+                                {isRegister ? 'Sign Up ' : 'Sign In '}
+                                <span className="spinner"/>
+                            </>
+                        ) : (
+                            isRegister ? 'Sign Up' : 'Sign In'
+                        )}
                 </button>
             </form>
             <button

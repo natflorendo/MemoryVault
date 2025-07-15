@@ -1,9 +1,30 @@
+.search-bar-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 35%;
+}
+
 .search-bar {
-  width: 35%;
-  padding: 0.4rem;
+  width: 100%;
+  padding: 0.4rem 1.5rem 0.4rem 0.4rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  flex: 0 0 auto;
+}
+
+.clear-button {
+    position: absolute;
+    right: 0.2rem;
+    top: 30%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #888;
+}
+
+.clear-button:hover {
+    color: #000;
 }

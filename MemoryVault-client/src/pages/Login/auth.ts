@@ -37,9 +37,11 @@ export const handleSubmit = async (
     email: string,
     password: string,
     isRegister: boolean,
+    setLoading: (loading: boolean) => void,
     navigate: NavigateFunction
 ) => {
     e.preventDefault();
+    setLoading(true);
     try {
         if (isRegister) {
             await axios.post(`${HOST}/auth/register`, { email, password });
@@ -55,5 +57,7 @@ export const handleSubmit = async (
         navigate('/');
     } catch (err:any) {
         alert('Invalid credentials')
+    } finally {
+        setLoading(false);
     }
 }

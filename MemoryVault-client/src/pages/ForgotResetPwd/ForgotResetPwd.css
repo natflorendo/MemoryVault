@@ -40,6 +40,18 @@
     border-color: var(--accent-line-color);
 }
 
+.reset-toggle-pwd-icon {
+    position: absolute;
+    top: 50%;
+    right: 3rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    border: none;
+    align-items: center;
+    background: transparent;
+}
+
 .forgot-submit-btn,
 .reset-submit-btn{
     width: 100%;

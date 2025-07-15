@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { verifyResetCode, updatePassword } from "./forgotReset";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import './ForgotResetPwd.css';
 
 export default function ResetPwd() {
@@ -9,6 +11,8 @@ export default function ResetPwd() {
 
     const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [codeVerified, setCodeVerified] = useState(false);
 
@@ -24,8 +28,8 @@ export default function ResetPwd() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            console.log(codeVerified);
             if(!codeVerified) {
                 await verifyResetCode(email, code);
                 setCodeVerified(true);
@@ -35,6 +39,8 @@ export default function ResetPwd() {
             }
         } catch (err: any) {
             alert("Something went wrong. Check your inputs.")
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -61,14 +67,34 @@ export default function ResetPwd() {
                     </>
                 ) : (
                     <>
-                        <input
-                            type="password"
-                            placeholder="Enter new password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
-                        <button  className="reset-submit-btn" type="submit">Set Password</button>
+                        <div className="reset-password-container">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter new password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                className="reset-toggle-pwd-icon"
+                                type="button"
+                                onClick={() => setShowPassword(prev => !prev)}
+                            >
+                                <FontAwesomeIcon 
+                                    icon={showPassword ? faEye: faEyeSlash} 
+                                />
+                            </button>
+                        </div>
+                        <button  className="reset-submit-btn" type="submit" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    Set Password
+                                    <span className="spinner"/>
+                                </>
+                            ) : (
+                                "Set Password"
+                            )}
+                        </button>
                     </>
                 )}
             </form>
