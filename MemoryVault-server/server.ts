@@ -43,6 +43,9 @@ app.use(limiter);
 
 app.use(passport.initialize());
 
+// Trust the first proxy hop (Render/Heroku-style)
+app.set("trust proxy", 1); // or `true` to trust all hops
+
 app.use('/notes', noteRoutes);
 app.use('/tags', tagRoutes);
 app.use('/auth', authRoutes);
