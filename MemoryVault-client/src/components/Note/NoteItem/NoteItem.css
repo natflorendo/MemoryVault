@@ -7,6 +7,7 @@
     height: fit-content;
     width: 100%;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 .note-item button {
@@ -20,6 +21,7 @@
 .note-item button:hover {
     transform: scale(1.2);
     color: #9c8a8c;
+    cursor: pointer;
 }
 
 .note-tag-container {

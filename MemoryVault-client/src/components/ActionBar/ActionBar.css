@@ -7,6 +7,17 @@
     height: 2.9rem;
 }
 
+.tiptap-button:hover {
+  background-color: rgba(108, 108, 108, 0.145);
+  cursor: pointer;
+}
+
+.tiptap-button:active, 
+.tiptap-button[data-active-state=on]:not([disabled]):hover,
+.tiptap-button[data-active-state=on]:not([disabled]) {
+  background-color: rgba(238, 200, 200, 0.488);
+}
+
 .tiptap-tooltip {
   background-color: #f0f0f0;
 }
@@ -21,10 +32,12 @@
     width: 5em;
     height: 2.5em;
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .delete-btn {
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .save-btn:hover:not(:disabled), .save-btn:focus:not(:disabled),
