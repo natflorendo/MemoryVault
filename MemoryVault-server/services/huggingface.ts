@@ -10,7 +10,7 @@ async function analyzeEmotion(text: string) {
         if (!apiKey) { throw new Error('Missing Hugging Face API key'); }
 
         const response = await axios.post(
-            `https://api-inference.huggingface.co/models/${MODEL}`,
+            `https://router.huggingface.co/hf-inference/models/${MODEL}`,
             { inputs: text },
             {
                 headers: {
